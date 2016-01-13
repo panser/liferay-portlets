@@ -80,6 +80,8 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 		guestbook.setExpandoBridgeAttributes(serviceContext);
 
 		guestbookPersistence.update(guestbook);
+		
+		resourceLocalService.addResources(user.getCompanyId(), groupId, userId, Guestbook.class.getName(), guestbookId, false, true, true);
 
 		return guestbook;
 	}

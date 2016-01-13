@@ -86,6 +86,8 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
 	    entryPersistence.update(entry);
 
+	    resourceLocalService.addResources(user.getCompanyId(), groupId, userId, Entry.class.getName(), entryId, false, true, true);
+	    
 	    return entry;
 
 	}
