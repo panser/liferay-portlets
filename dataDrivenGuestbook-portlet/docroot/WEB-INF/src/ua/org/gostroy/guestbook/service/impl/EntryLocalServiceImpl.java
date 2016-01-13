@@ -14,6 +14,19 @@
 
 package ua.org.gostroy.guestbook.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+
+import ua.org.gostroy.guestbook.EntryEmailException;
+import ua.org.gostroy.guestbook.EntryMessageException;
+import ua.org.gostroy.guestbook.EntryNameException;
+import ua.org.gostroy.guestbook.model.Entry;
 import ua.org.gostroy.guestbook.service.base.EntryLocalServiceBaseImpl;
 
 /**
@@ -36,4 +49,60 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link ua.org.gostroy.guestbook.service.EntryLocalServiceUtil} to access the entry local service.
 	 */
+	
+	public List<Entry> getEntries(long groupId, long guestbookId) throws SystemException {
+	    return entryPersistence.findByG_G(groupId, guestbookId);
+	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId, int start, int end) throws SystemException {
+	    return entryPersistence.findByG_G(groupId, guestbookId, start, end);
+	}
+	
+	public Entry addEntry(long userId, long guestbookId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
+	    long groupId = serviceContext.getScopeGroupId();
+
+	    User user = userPersistence.findByPrimaryKey(userId);
+
+	    Date now = new Date();
+
+	    validate(name, email, message);
+
+	    long entryId = counterLocalService.increment();
+
+	    Entry entry = entryPersistence.create(entryId);
+
+//	    entry.setUuid(serviceContext.getUuid());
+	    entry.setUserId(userId);
+	    entry.setGroupId(groupId);
+	    entry.setCompanyId(user.getCompanyId());
+	    entry.setUserName(user.getFullName());
+	    entry.setCreateDate(serviceContext.getCreateDate(now));
+	    entry.setModifiedDate(serviceContext.getModifiedDate(now));
+	    entry.setExpandoBridgeAttributes(serviceContext);
+	    entry.setGuestbookId(guestbookId);
+	    entry.setName(name);
+	    entry.setEmail(email);
+	    entry.setMessage(message);
+
+	    entryPersistence.update(entry);
+
+	    return entry;
+
+	}
+	
+	
+	
+	protected void validate (String name, String email, String entry) throws PortalException {
+	    if (Validator.isNull(name)) {
+	        throw new EntryNameException();
+	    }
+
+	    if (!Validator.isEmailAddress(email)) {
+	        throw new EntryEmailException();
+	    }
+
+	    if (Validator.isNull(entry)) {
+	        throw new EntryMessageException();
+	    }
+	}
 }

@@ -14,6 +14,17 @@
 
 package ua.org.gostroy.guestbook.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
+
+import ua.org.gostroy.guestbook.GuestbookNameException;
+import ua.org.gostroy.guestbook.model.Guestbook;
 import ua.org.gostroy.guestbook.service.base.GuestbookLocalServiceBaseImpl;
 
 /**
@@ -36,4 +47,47 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil} to access the guestbook local service.
 	 */
+	
+	public List<Guestbook> getGuestbooks (long groupId) throws SystemException {
+	    return guestbookPersistence.findByGroupId(groupId);
+	}
+
+	public List<Guestbook> getGuestbooks (long groupId, int start, int end) throws SystemException {
+	    return guestbookPersistence.findByGroupId(groupId, start, end);
+	}
+	
+	public Guestbook addGuestbook(long userId, String name, ServiceContext serviceContext) throws SystemException, PortalException {
+		long groupId = serviceContext.getScopeGroupId();
+
+		User user = userPersistence.findByPrimaryKey(userId);
+
+		Date now = new Date();
+
+		validate(name);
+
+		long guestbookId = counterLocalService.increment();
+
+		Guestbook guestbook = guestbookPersistence.create(guestbookId);
+
+//		guestbook.setUuid(serviceContext.getUuid());
+		guestbook.setUserId(userId);
+		guestbook.setGroupId(groupId);
+		guestbook.setCompanyId(user.getCompanyId());
+		guestbook.setUserName(user.getFullName());
+		guestbook.setCreateDate(serviceContext.getCreateDate(now));
+		guestbook.setModifiedDate(serviceContext.getModifiedDate(now));
+		guestbook.setName(name);
+		guestbook.setExpandoBridgeAttributes(serviceContext);
+
+		guestbookPersistence.update(guestbook);
+
+		return guestbook;
+	}
+	
+	
+	protected void validate (String name) throws PortalException {
+	    if (Validator.isNull(name)) {
+	       throw new GuestbookNameException();
+	    }
+	}
 }
