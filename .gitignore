@@ -4,3 +4,5 @@
 
 **/out/
 **/classes/
+**/WEB-INF/lib/
+**/*.class
