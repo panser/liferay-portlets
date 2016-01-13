@@ -8,45 +8,49 @@
     <%
         List<Guestbook> guestbooks = GuestbookLocalServiceUtil.getGuestbooks(scopeGroupId);
             for (int i = 0; i < guestbooks.size(); i++) {
-                Guestbook curGuestbook = (Guestbook) guestbooks.get(i);
+				Guestbook curGuestbook = (Guestbook) guestbooks.get(i);
                 String cssClass = StringPool.BLANK;
 
                 if (curGuestbook.getGuestbookId() == guestbookId) {
                     cssClass = "active";
                 }
-    %>
 
-    <portlet:renderURL var="viewPageURL">
-        <portlet:param name="mvcPath" value="/html/guestbook/view.jsp" />
-        <portlet:param name="guestbookId"
-            value="<%=String.valueOf(curGuestbook.getGuestbookId())%>" />
-    </portlet:renderURL>
-
-    <aui:nav-item cssClass="<%=cssClass%>" href="<%=viewPageURL%>"
-        label="<%=HtmlUtil.escape(curGuestbook.getName())%>" />
-
-    <%
-        }
+                if (GuestbookPermission.contains(permissionChecker, curGuestbook.getGuestbookId(), "VIEW")) {
+	                %>
+				
+				    <portlet:renderURL var="viewPageURL">
+				        <portlet:param name="mvcPath" value="/html/guestbook/view.jsp" />
+				        <portlet:param name="guestbookId"
+				            value="<%=String.valueOf(curGuestbook.getGuestbookId())%>" />
+				    </portlet:renderURL>
+				
+				    <aui:nav-item cssClass="<%=cssClass%>" href="<%=viewPageURL%>"
+				        label="<%=HtmlUtil.escape(curGuestbook.getName())%>" />
+				
+				    <%
+        		}
+            }
     %>
 
 </aui:nav>
 
 <aui:button-row cssClass="guestbook-buttons">
-
     <portlet:renderURL var="addGuestbookURL">
-        <portlet:param name="mvcPath"
-            value="/html/guestbook/edit_guestbook.jsp" />
+        <portlet:param name="mvcPath" value="/html/guestbook/edit_guestbook.jsp" />
     </portlet:renderURL>
 
     <portlet:renderURL var="addEntryURL">
         <portlet:param name="mvcPath" value="/html/guestbook/edit_entry.jsp" />
-        <portlet:param name="guestbookId"
-            value="<%=String.valueOf(guestbookId)%>" />
+        <portlet:param name="guestbookId" value="<%=String.valueOf(guestbookId)%>" />
     </portlet:renderURL>
 
-    <aui:button onClick="<%=addGuestbookURL.toString()%>"
-        value="Add Guestbook" />
-    <aui:button onClick="<%=addEntryURL.toString()%>" value="Add Entry"></aui:button>
+	<c:if test='<%= GuestbookModelPermission.contains(permissionChecker, scopeGroupId, "ADD_GUESTBOOK") %>'>
+	    <aui:button onClick="<%=addGuestbookURL.toString()%>" value="Add Guestbook" />
+	</c:if>
+    
+	<c:if test='<%= GuestbookPermission.contains(permissionChecker, guestbookId, "ADD_ENTRY") %>'>
+	    <aui:button onClick="<%=addEntryURL.toString()%>" value="Add Entry"></aui:button>
+    </c:if>
 
 </aui:button-row>
 
