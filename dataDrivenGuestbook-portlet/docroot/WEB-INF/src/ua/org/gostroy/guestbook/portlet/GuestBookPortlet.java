@@ -2,24 +2,28 @@ package ua.org.gostroy.guestbook.portlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.ValidatorException;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import ua.org.gostroy.guestbook.model.Entry;
+import ua.org.gostroy.guestbook.model.Guestbook;
+import ua.org.gostroy.guestbook.service.EntryLocalServiceUtil;
+import ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil;
 
 /**
  * Portlet implementation class GuestBookPortlet
@@ -28,70 +32,70 @@ public class GuestBookPortlet extends MVCPortlet {
 	
 	
 	@Override
-	public void render (RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException, IOException {
+	public void render(RenderRequest renderRequest, RenderResponse renderResponse) throws PortletException, IOException {
 
-	    PortletPreferences prefs = renderRequest.getPreferences();
-	    String[] guestbookEntries = prefs.getValues("guestbook-entries", new String[1]);
+	    try {
+	        ServiceContext serviceContext = ServiceContextFactory.getInstance(Guestbook.class.getName(), renderRequest);
+	        long groupId = serviceContext.getScopeGroupId();
 
-	    if (guestbookEntries != null) {
-	        List<Entry> entries = parseEntries(guestbookEntries);
-	        renderRequest.setAttribute("entries", entries);
+	        long guestbookId = ParamUtil.getLong(renderRequest, "guestbookId");
+
+	        List<Guestbook> guestbooks = GuestbookLocalServiceUtil.getGuestbooks(groupId);
+
+	        if (guestbooks.size() == 0) {
+	            Guestbook guestbook = GuestbookLocalServiceUtil.addGuestbook(serviceContext.getUserId(), "Main", serviceContext);
+	            guestbookId = guestbook.getGuestbookId();
+	        }
+
+	        if (!(guestbookId > 0)) {
+	            guestbookId = guestbooks.get(0).getGuestbookId();
+	        }
+
+	        renderRequest.setAttribute("guestbookId", guestbookId);
+
+	    } catch (Exception e) {
+	        throw new PortletException(e);
 	    }
 
 	    super.render(renderRequest, renderResponse);
-
 	}
+	
  
-	public void addEntry(ActionRequest request, ActionResponse response) {
+	public void addEntry(ActionRequest request, ActionResponse response) throws PortalException, SystemException {
 
-		try {
-		       PortletPreferences prefs = request.getPreferences();
+	    ServiceContext serviceContext = ServiceContextFactory.getInstance(Entry.class.getName(), request);
 
-		       String[] guestbookEntries = prefs.getValues("guestbook-entries", new String[1]);
+	    String userName = ParamUtil.getString(request, "name");
+	    String email = ParamUtil.getString(request, "email");
+	    String message = ParamUtil.getString(request, "message");
+	    long guestbookId = ParamUtil.getLong(request, "guestbookId");
 
-		       ArrayList<String> entries = new ArrayList<String>();
-
-		       if (guestbookEntries != null) {
-
-		         entries = new ArrayList<String>(Arrays.asList(prefs.getValues("guestbook-entries", new String[1])));
-
-		       }
-
-		       String userName = ParamUtil.getString(request, "name");
-		       String message = ParamUtil.getString(request, "message");
-		       String entry = userName + "^" + message;
-
-		       entries.add(entry);
-
-		       String[] array = entries.toArray(new String[entries.size()]);
-
-		       prefs.setValues("guestbook-entries", array);
-
-		       try {
-		         prefs.store();
-		       
-		       } catch (IOException ex) {
-		         Logger.getLogger(GuestBookPortlet.class.getName()).log(Level.SEVERE, null, ex);
-		       } catch (ValidatorException ex) {
-		         Logger.getLogger(GuestBookPortlet.class.getName()).log(Level.SEVERE, null, ex);
-		       }
-	    } catch (ReadOnlyException ex) {
-	       Logger.getLogger(GuestBookPortlet.class.getName()).log(Level.SEVERE, null, ex);
+	    try {
+	        EntryLocalServiceUtil.addEntry(serviceContext.getUserId(), guestbookId, userName, email, message, serviceContext);
+	        SessionMessages.add(request, "entryAdded");
+	        response.setRenderParameter("guestbookId", Long.toString(guestbookId));
+	    } catch (Exception e) {
+	        SessionErrors.add(request, e.getClass().getName());
+	        PortalUtil.copyRequestParameters(request, response);
+	        response.setRenderParameter("mvcPath","/html/guestbook/edit_entry.jsp");
 	    }
+
 	}
 	
-	
-	private List<Entry> parseEntries (String[] guestbookEntries) {
+	public void addGuestbook(ActionRequest request, ActionResponse response) throws PortalException, SystemException {
 
-	    ArrayList<Entry> entries = new ArrayList();
+	    ServiceContext serviceContext = ServiceContextFactory.getInstance(Guestbook.class.getName(), request);
 
-	    for (String entry : guestbookEntries) {
-	        String[] parts = entry.split("\\^", 2);
-	        Entry gbEntry = new Entry(parts[0], parts[1]);
-	        entries.add(gbEntry);
+	    String name = ParamUtil.getString(request, "name");
+
+	    try {
+	        GuestbookLocalServiceUtil.addGuestbook(serviceContext.getUserId(), name, serviceContext);
+	        SessionMessages.add(request, "guestbookAdded");
+	    } catch (Exception e) {
+	        SessionErrors.add(request, e.getClass().getName());
+	        response.setRenderParameter("mvcPath", "/html/guestbook/edit_guestbook.jsp");
 	    }
 
-	    return entries;
 	}
 	
 }
