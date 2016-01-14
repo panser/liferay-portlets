@@ -6,6 +6,7 @@
 	<portlet>
 		<portlet-name>guest-book</portlet-name>
 		<icon>/icon.png</icon>
+		<indexer-class>ua.org.gostroy.guestbook.search.EntryIndexer</indexer-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
