@@ -1,4 +1,4 @@
-package ya.org.gostroy.guestbook.util;
+package ua.org.gostroy.guestbook.util;
 
 public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
 
