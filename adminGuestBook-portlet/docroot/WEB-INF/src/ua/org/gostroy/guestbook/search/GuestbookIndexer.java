@@ -20,20 +20,21 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 
-import ua.org.gostroy.guestbook.model.Entry;
-import ua.org.gostroy.guestbook.service.EntryLocalServiceUtil;
+import ua.org.gostroy.guestbook.model.Guestbook;
+import ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.permission.GuestbookPermission;
-import ua.org.gostroy.guestbook.service.persistence.EntryActionableDynamicQuery;
+import ua.org.gostroy.guestbook.service.persistence.GuestbookActionableDynamicQuery;
 import ua.org.gostroy.guestbook.util.PortletKeys;
 
-public class EntryIndexer extends BaseIndexer {
+public class GuestbookIndexer extends BaseIndexer {
 
-	public static final String[] CLASS_NAMES = { Entry.class.getName() };
-	public static final String PORTLET_ID = PortletKeys.GUESTBOOK;
+	public static final String[] CLASS_NAMES = { Guestbook.class.getName() };
+	public static final String PORTLET_ID = PortletKeys.GUESTBOOK_ADMIN;	
 
-	public EntryIndexer() {	
+	public GuestbookIndexer() {
 		setPermissionAware(true);
 	}
+
 
 	@Override
 	public String[] getClassNames() {
@@ -46,27 +47,25 @@ public class EntryIndexer extends BaseIndexer {
 	}
 
 	@Override
-	public boolean hasPermission(PermissionChecker permissionChecker, String entryClassName, long entryClassPK, String actionId) throws Exception {
-		return GuestbookPermission.contains(permissionChecker, entryClassPK, ActionKeys.VIEW);
+	public boolean hasPermission(PermissionChecker permissionChecker, String guestbookClassName, long guestbookClassPK, String actionId) throws Exception {
+		return GuestbookPermission.contains(permissionChecker, guestbookClassPK, ActionKeys.VIEW);
 	}
 
 	@Override
 	protected void doDelete(Object obj) throws Exception {
-		Entry entry = (Entry) obj;
-		deleteDocument(entry.getCompanyId(), entry.getEntryId());
+		Guestbook guestbook = (Guestbook) obj;
+		deleteDocument(guestbook.getCompanyId(), guestbook.getGuestbookId());
 	}
 
 	@Override
 	protected Document doGetDocument(Object obj) throws Exception {
-		Entry entry = (Entry) obj;
-		Document document = getBaseModelDocument(PORTLET_ID, entry);
+		Guestbook guestbook = (Guestbook) obj;
+		Document document = getBaseModelDocument(PORTLET_ID, guestbook);
 
-		document.addDate(Field.MODIFIED_DATE, entry.getModifiedDate());
-		document.addText(Field.CONTENT, entry.getMessage());
-		document.addText(Field.TITLE, entry.getName());
-		document.addText("email", entry.getEmail());
-		document.addKeyword(Field.GROUP_ID, getSiteGroupId(entry.getGroupId()));
-		document.addKeyword(Field.SCOPE_GROUP_ID, entry.getGroupId());
+		document.addDate(Field.MODIFIED_DATE, guestbook.getModifiedDate());
+		document.addText(Field.TITLE, guestbook.getName());
+		document.addKeyword(Field.GROUP_ID, getSiteGroupId(guestbook.getGroupId()));
+		document.addKeyword(Field.SCOPE_GROUP_ID, guestbook.getGroupId());
 
 		return document;
 	}
@@ -81,16 +80,15 @@ public class EntryIndexer extends BaseIndexer {
 
 	@Override
 	protected void doReindex(Object obj) throws Exception {
-		Entry entry = (Entry) obj;
-		Document document = getDocument(entry);
-
-		SearchEngineUtil.updateDocument(getSearchEngineId(), entry.getCompanyId(), document);
+		Guestbook guestbook = (Guestbook) obj;
+		Document document = getDocument(guestbook);
+		SearchEngineUtil.updateDocument(getSearchEngineId(), guestbook.getCompanyId(), document);
 	}
 
 	@Override
 	protected void doReindex(String className, long classPK) throws Exception {
-		Entry entry = EntryLocalServiceUtil.getEntry(classPK);
-		doReindex(entry);
+		Guestbook guestbook = GuestbookLocalServiceUtil.getGuestbook(classPK);
+		doReindex(guestbook);
 	}
 
 	@Override
@@ -104,10 +102,11 @@ public class EntryIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
+	
 	protected void reindexEntries(long companyId) throws PortalException, SystemException {
-
 		final Collection<Document> documents = new ArrayList<Document>();
-		ActionableDynamicQuery actionableDynamicQuery = new EntryActionableDynamicQuery() {
+
+		ActionableDynamicQuery actionableDynamicQuery = new GuestbookActionableDynamicQuery() {
 
 			@Override
 			protected void addCriteria(DynamicQuery dynamicQuery) {
@@ -115,8 +114,8 @@ public class EntryIndexer extends BaseIndexer {
 
 			@Override
 			protected void performAction(Object object) throws PortalException {
-				Entry entry = (Entry) object;
-				Document document = getDocument(entry);
+				Guestbook guestbook = (Guestbook) object;
+				Document document = getDocument(guestbook);
 				documents.add(document);
 			}
 
