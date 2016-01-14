@@ -8,6 +8,7 @@
 		<icon>/icon.png</icon>
 		<indexer-class>ua.org.gostroy.guestbook.search.EntryIndexer</indexer-class>
 		<indexer-class>ua.org.gostroy.guestbook.search.GuestbookIndexer</indexer-class>
+		<asset-renderer-factory>ua.org.gostroy.guestbook.asset.EntryAssetRendererFactory</asset-renderer-factory>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
@@ -21,6 +22,7 @@
 			site_administration.content
 		</control-panel-entry-category>
 		<control-panel-entry-weight>1.5</control-panel-entry-weight>
+		<asset-renderer-factory>ua.org.gostroy.guestbook.asset.GuestbookAssetRendererFactory</asset-renderer-factory>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
 			/js/main.js
