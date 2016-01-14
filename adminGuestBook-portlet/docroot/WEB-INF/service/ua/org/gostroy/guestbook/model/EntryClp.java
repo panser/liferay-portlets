@@ -16,6 +16,7 @@ package ua.org.gostroy.guestbook.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
@@ -74,6 +75,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("entryId", getEntryId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -91,6 +93,12 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long entryId = (Long)attributes.get("entryId");
 
 		if (entryId != null) {
@@ -155,6 +163,29 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 		if (guestbookId != null) {
 			setGuestbookId(guestbookId);
+		}
+	}
+
+	@Override
+	public String getUuid() {
+		return _uuid;
+	}
+
+	@Override
+	public void setUuid(String uuid) {
+		_uuid = uuid;
+
+		if (_entryRemoteModel != null) {
+			try {
+				Class<?> clazz = _entryRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUuid", String.class);
+
+				method.invoke(_entryRemoteModel, uuid);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
 		}
 	}
 
@@ -421,6 +452,12 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		}
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Entry.class.getName()));
+	}
+
 	public BaseModel<?> getEntryRemoteModel() {
 		return _entryRemoteModel;
 	}
@@ -490,6 +527,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 	public Object clone() {
 		EntryClp clone = new EntryClp();
 
+		clone.setUuid(getUuid());
 		clone.setEntryId(getEntryId());
 		clone.setGroupId(getGroupId());
 		clone.setCompanyId(getCompanyId());
@@ -553,9 +591,11 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{entryId=");
+		sb.append("{uuid=");
+		sb.append(getUuid());
+		sb.append(", entryId=");
 		sb.append(getEntryId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -584,12 +624,16 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("ua.org.gostroy.guestbook.model.Entry");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>uuid</column-name><column-value><![CDATA[");
+		sb.append(getUuid());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>entryId</column-name><column-value><![CDATA[");
 		sb.append(getEntryId());
@@ -640,6 +684,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		return sb.toString();
 	}
 
+	private String _uuid;
 	private long _entryId;
 	private long _groupId;
 	private long _companyId;

@@ -17,6 +17,7 @@ package ua.org.gostroy.guestbook.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -66,6 +67,7 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	 */
 	public static final String TABLE_NAME = "GB_Guestbook";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "uuid_", Types.VARCHAR },
 			{ "guestbookId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -75,7 +77,7 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "name", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table GB_Guestbook (guestbookId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table GB_Guestbook (uuid_ VARCHAR(75) null,guestbookId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table GB_Guestbook";
 	public static final String ORDER_BY_JPQL = " ORDER BY guestbook.guestbookId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY GB_Guestbook.guestbookId ASC";
@@ -91,8 +93,10 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.ua.org.gostroy.guestbook.model.Guestbook"),
 			true);
-	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long GUESTBOOKID_COLUMN_BITMASK = 2L;
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long GUESTBOOKID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -107,6 +111,7 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 		Guestbook model = new GuestbookImpl();
 
+		model.setUuid(soapModel.getUuid());
 		model.setGuestbookId(soapModel.getGuestbookId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -179,6 +184,7 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("guestbookId", getGuestbookId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -193,6 +199,12 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long guestbookId = (Long)attributes.get("guestbookId");
 
 		if (guestbookId != null) {
@@ -244,6 +256,30 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 	@JSON
 	@Override
+	public String getUuid() {
+		if (_uuid == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _uuid;
+		}
+	}
+
+	@Override
+	public void setUuid(String uuid) {
+		if (_originalUuid == null) {
+			_originalUuid = _uuid;
+		}
+
+		_uuid = uuid;
+	}
+
+	public String getOriginalUuid() {
+		return GetterUtil.getString(_originalUuid);
+	}
+
+	@JSON
+	@Override
 	public long getGuestbookId() {
 		return _guestbookId;
 	}
@@ -284,7 +320,19 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 	@Override
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
 	}
 
 	@JSON
@@ -362,6 +410,12 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 		_name = name;
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Guestbook.class.getName()));
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -393,6 +447,7 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	public Object clone() {
 		GuestbookImpl guestbookImpl = new GuestbookImpl();
 
+		guestbookImpl.setUuid(getUuid());
 		guestbookImpl.setGuestbookId(getGuestbookId());
 		guestbookImpl.setGroupId(getGroupId());
 		guestbookImpl.setCompanyId(getCompanyId());
@@ -453,9 +508,15 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	public void resetOriginalValues() {
 		GuestbookModelImpl guestbookModelImpl = this;
 
+		guestbookModelImpl._originalUuid = guestbookModelImpl._uuid;
+
 		guestbookModelImpl._originalGroupId = guestbookModelImpl._groupId;
 
 		guestbookModelImpl._setOriginalGroupId = false;
+
+		guestbookModelImpl._originalCompanyId = guestbookModelImpl._companyId;
+
+		guestbookModelImpl._setOriginalCompanyId = false;
 
 		guestbookModelImpl._columnBitmask = 0;
 	}
@@ -463,6 +524,14 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	@Override
 	public CacheModel<Guestbook> toCacheModel() {
 		GuestbookCacheModel guestbookCacheModel = new GuestbookCacheModel();
+
+		guestbookCacheModel.uuid = getUuid();
+
+		String uuid = guestbookCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			guestbookCacheModel.uuid = null;
+		}
 
 		guestbookCacheModel.guestbookId = getGuestbookId();
 
@@ -511,9 +580,11 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
-		sb.append("{guestbookId=");
+		sb.append("{uuid=");
+		sb.append(getUuid());
+		sb.append(", guestbookId=");
 		sb.append(getGuestbookId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -536,12 +607,16 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("ua.org.gostroy.guestbook.model.Guestbook");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>uuid</column-name><column-value><![CDATA[");
+		sb.append(getUuid());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>guestbookId</column-name><column-value><![CDATA[");
 		sb.append(getGuestbookId());
@@ -584,11 +659,15 @@ public class GuestbookModelImpl extends BaseModelImpl<Guestbook>
 	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Guestbook.class
 		};
+	private String _uuid;
+	private String _originalUuid;
 	private long _guestbookId;
 	private long _groupId;
 	private long _originalGroupId;
 	private boolean _setOriginalGroupId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _userId;
 	private String _userUuid;
 	private String _userName;

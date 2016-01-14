@@ -31,6 +31,9 @@ import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 
+import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
+import com.liferay.portlet.asset.service.persistence.AssetLinkPersistence;
+
 import ua.org.gostroy.guestbook.model.Guestbook;
 import ua.org.gostroy.guestbook.service.GuestbookLocalService;
 import ua.org.gostroy.guestbook.service.persistence.EntryPersistence;
@@ -217,6 +220,34 @@ public abstract class GuestbookLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the guestbook with the matching UUID and company.
+	 *
+	 * @param uuid the guestbook's UUID
+	 * @param  companyId the primary key of the company
+	 * @return the matching guestbook, or <code>null</code> if a matching guestbook could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Guestbook fetchGuestbookByUuidAndCompanyId(String uuid,
+		long companyId) throws SystemException {
+		return guestbookPersistence.fetchByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the guestbook matching the UUID and group.
+	 *
+	 * @param uuid the guestbook's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching guestbook, or <code>null</code> if a matching guestbook could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Guestbook fetchGuestbookByUuidAndGroupId(String uuid, long groupId)
+		throws SystemException {
+		return guestbookPersistence.fetchByUUID_G(uuid, groupId);
+	}
+
+	/**
 	 * Returns the guestbook with the primary key.
 	 *
 	 * @param guestbookId the primary key of the guestbook
@@ -234,6 +265,36 @@ public abstract class GuestbookLocalServiceBaseImpl extends BaseLocalServiceImpl
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException, SystemException {
 		return guestbookPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
+	/**
+	 * Returns the guestbook with the matching UUID and company.
+	 *
+	 * @param uuid the guestbook's UUID
+	 * @param  companyId the primary key of the company
+	 * @return the matching guestbook
+	 * @throws PortalException if a matching guestbook could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Guestbook getGuestbookByUuidAndCompanyId(String uuid, long companyId)
+		throws PortalException, SystemException {
+		return guestbookPersistence.findByUuid_C_First(uuid, companyId, null);
+	}
+
+	/**
+	 * Returns the guestbook matching the UUID and group.
+	 *
+	 * @param uuid the guestbook's UUID
+	 * @param groupId the primary key of the group
+	 * @return the matching guestbook
+	 * @throws PortalException if a matching guestbook could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Guestbook getGuestbookByUuidAndGroupId(String uuid, long groupId)
+		throws PortalException, SystemException {
+		return guestbookPersistence.findByUUID_G(uuid, groupId);
 	}
 
 	/**
@@ -486,6 +547,101 @@ public abstract class GuestbookLocalServiceBaseImpl extends BaseLocalServiceImpl
 		this.userPersistence = userPersistence;
 	}
 
+	/**
+	 * Returns the asset entry local service.
+	 *
+	 * @return the asset entry local service
+	 */
+	public com.liferay.portlet.asset.service.AssetEntryLocalService getAssetEntryLocalService() {
+		return assetEntryLocalService;
+	}
+
+	/**
+	 * Sets the asset entry local service.
+	 *
+	 * @param assetEntryLocalService the asset entry local service
+	 */
+	public void setAssetEntryLocalService(
+		com.liferay.portlet.asset.service.AssetEntryLocalService assetEntryLocalService) {
+		this.assetEntryLocalService = assetEntryLocalService;
+	}
+
+	/**
+	 * Returns the asset entry remote service.
+	 *
+	 * @return the asset entry remote service
+	 */
+	public com.liferay.portlet.asset.service.AssetEntryService getAssetEntryService() {
+		return assetEntryService;
+	}
+
+	/**
+	 * Sets the asset entry remote service.
+	 *
+	 * @param assetEntryService the asset entry remote service
+	 */
+	public void setAssetEntryService(
+		com.liferay.portlet.asset.service.AssetEntryService assetEntryService) {
+		this.assetEntryService = assetEntryService;
+	}
+
+	/**
+	 * Returns the asset entry persistence.
+	 *
+	 * @return the asset entry persistence
+	 */
+	public AssetEntryPersistence getAssetEntryPersistence() {
+		return assetEntryPersistence;
+	}
+
+	/**
+	 * Sets the asset entry persistence.
+	 *
+	 * @param assetEntryPersistence the asset entry persistence
+	 */
+	public void setAssetEntryPersistence(
+		AssetEntryPersistence assetEntryPersistence) {
+		this.assetEntryPersistence = assetEntryPersistence;
+	}
+
+	/**
+	 * Returns the asset link local service.
+	 *
+	 * @return the asset link local service
+	 */
+	public com.liferay.portlet.asset.service.AssetLinkLocalService getAssetLinkLocalService() {
+		return assetLinkLocalService;
+	}
+
+	/**
+	 * Sets the asset link local service.
+	 *
+	 * @param assetLinkLocalService the asset link local service
+	 */
+	public void setAssetLinkLocalService(
+		com.liferay.portlet.asset.service.AssetLinkLocalService assetLinkLocalService) {
+		this.assetLinkLocalService = assetLinkLocalService;
+	}
+
+	/**
+	 * Returns the asset link persistence.
+	 *
+	 * @return the asset link persistence
+	 */
+	public AssetLinkPersistence getAssetLinkPersistence() {
+		return assetLinkPersistence;
+	}
+
+	/**
+	 * Sets the asset link persistence.
+	 *
+	 * @param assetLinkPersistence the asset link persistence
+	 */
+	public void setAssetLinkPersistence(
+		AssetLinkPersistence assetLinkPersistence) {
+		this.assetLinkPersistence = assetLinkPersistence;
+	}
+
 	public void afterPropertiesSet() {
 		Class<?> clazz = getClass();
 
@@ -590,6 +746,16 @@ public abstract class GuestbookLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected com.liferay.portal.service.UserService userService;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
+	@BeanReference(type = com.liferay.portlet.asset.service.AssetEntryLocalService.class)
+	protected com.liferay.portlet.asset.service.AssetEntryLocalService assetEntryLocalService;
+	@BeanReference(type = com.liferay.portlet.asset.service.AssetEntryService.class)
+	protected com.liferay.portlet.asset.service.AssetEntryService assetEntryService;
+	@BeanReference(type = AssetEntryPersistence.class)
+	protected AssetEntryPersistence assetEntryPersistence;
+	@BeanReference(type = com.liferay.portlet.asset.service.AssetLinkLocalService.class)
+	protected com.liferay.portlet.asset.service.AssetLinkLocalService assetLinkLocalService;
+	@BeanReference(type = AssetLinkPersistence.class)
+	protected AssetLinkPersistence assetLinkPersistence;
 	private String _beanIdentifier;
 	private ClassLoader _classLoader;
 	private GuestbookLocalServiceClpInvoker _clpInvoker = new GuestbookLocalServiceClpInvoker();

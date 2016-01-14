@@ -14,6 +14,7 @@
 
 package ua.org.gostroy.guestbook.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
@@ -49,6 +50,7 @@ public class GuestbookWrapper implements Guestbook, ModelWrapper<Guestbook> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("guestbookId", getGuestbookId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -63,6 +65,12 @@ public class GuestbookWrapper implements Guestbook, ModelWrapper<Guestbook> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long guestbookId = (Long)attributes.get("guestbookId");
 
 		if (guestbookId != null) {
@@ -130,6 +138,26 @@ public class GuestbookWrapper implements Guestbook, ModelWrapper<Guestbook> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_guestbook.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the uuid of this guestbook.
+	*
+	* @return the uuid of this guestbook
+	*/
+	@Override
+	public java.lang.String getUuid() {
+		return _guestbook.getUuid();
+	}
+
+	/**
+	* Sets the uuid of this guestbook.
+	*
+	* @param uuid the uuid of this guestbook
+	*/
+	@Override
+	public void setUuid(java.lang.String uuid) {
+		_guestbook.setUuid(uuid);
 	}
 
 	/**
@@ -435,6 +463,11 @@ public class GuestbookWrapper implements Guestbook, ModelWrapper<Guestbook> {
 		}
 
 		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _guestbook.getStagedModelType();
 	}
 
 	/**

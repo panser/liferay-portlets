@@ -16,6 +16,7 @@ package ua.org.gostroy.guestbook.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
@@ -74,6 +75,7 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("guestbookId", getGuestbookId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -88,6 +90,12 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long guestbookId = (Long)attributes.get("guestbookId");
 
 		if (guestbookId != null) {
@@ -134,6 +142,29 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 
 		if (name != null) {
 			setName(name);
+		}
+	}
+
+	@Override
+	public String getUuid() {
+		return _uuid;
+	}
+
+	@Override
+	public void setUuid(String uuid) {
+		_uuid = uuid;
+
+		if (_guestbookRemoteModel != null) {
+			try {
+				Class<?> clazz = _guestbookRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUuid", String.class);
+
+				method.invoke(_guestbookRemoteModel, uuid);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
 		}
 	}
 
@@ -331,6 +362,12 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 		}
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Guestbook.class.getName()));
+	}
+
 	public BaseModel<?> getGuestbookRemoteModel() {
 		return _guestbookRemoteModel;
 	}
@@ -400,6 +437,7 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 	public Object clone() {
 		GuestbookClp clone = new GuestbookClp();
 
+		clone.setUuid(getUuid());
 		clone.setGuestbookId(getGuestbookId());
 		clone.setGroupId(getGroupId());
 		clone.setCompanyId(getCompanyId());
@@ -460,9 +498,11 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(17);
+		StringBundler sb = new StringBundler(19);
 
-		sb.append("{guestbookId=");
+		sb.append("{uuid=");
+		sb.append(getUuid());
+		sb.append(", guestbookId=");
 		sb.append(getGuestbookId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -485,12 +525,16 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(28);
+		StringBundler sb = new StringBundler(31);
 
 		sb.append("<model><model-name>");
 		sb.append("ua.org.gostroy.guestbook.model.Guestbook");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>uuid</column-name><column-value><![CDATA[");
+		sb.append(getUuid());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>guestbookId</column-name><column-value><![CDATA[");
 		sb.append(getGuestbookId());
@@ -529,6 +573,7 @@ public class GuestbookClp extends BaseModelImpl<Guestbook> implements Guestbook 
 		return sb.toString();
 	}
 
+	private String _uuid;
 	private long _guestbookId;
 	private long _groupId;
 	private long _companyId;

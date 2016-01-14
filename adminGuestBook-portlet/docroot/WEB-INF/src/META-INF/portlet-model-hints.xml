@@ -2,6 +2,7 @@
 
 <model-hints>
 	<model name="ua.org.gostroy.guestbook.model.Entry">
+		<field name="uuid" type="String" />
 		<field name="entryId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -15,6 +16,7 @@
 		<field name="guestbookId" type="long" />
 	</model>
 	<model name="ua.org.gostroy.guestbook.model.Guestbook">
+		<field name="uuid" type="String" />
 		<field name="guestbookId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />

@@ -73,7 +73,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	    long entryId = counterLocalService.increment();
 	    Entry entry = entryPersistence.create(entryId);
 	
-//	    entry.setUuid(serviceContext.getUuid());
+	    entry.setUuid(serviceContext.getUuid());
 	    entry.setUserId(userId);
 	    entry.setGroupId(groupId);
 	    entry.setCompanyId(user.getCompanyId());

@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
-import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedGroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -40,7 +40,7 @@ import java.util.Date;
  * @see ua.org.gostroy.guestbook.model.impl.EntryModelImpl
  * @generated
  */
-public interface EntryModel extends BaseModel<Entry>, GroupedModel {
+public interface EntryModel extends BaseModel<Entry>, StagedGroupedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -60,6 +60,23 @@ public interface EntryModel extends BaseModel<Entry>, GroupedModel {
 	 * @param primaryKey the primary key of this entry
 	 */
 	public void setPrimaryKey(long primaryKey);
+
+	/**
+	 * Returns the uuid of this entry.
+	 *
+	 * @return the uuid of this entry
+	 */
+	@AutoEscape
+	@Override
+	public String getUuid();
+
+	/**
+	 * Sets the uuid of this entry.
+	 *
+	 * @param uuid the uuid of this entry
+	 */
+	@Override
+	public void setUuid(String uuid);
 
 	/**
 	 * Returns the entry ID of this entry.

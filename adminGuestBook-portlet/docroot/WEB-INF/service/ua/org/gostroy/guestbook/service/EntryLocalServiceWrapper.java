@@ -186,6 +186,36 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	}
 
 	/**
+	* Returns the entry with the matching UUID and company.
+	*
+	* @param uuid the entry's UUID
+	* @param companyId the primary key of the company
+	* @return the matching entry, or <code>null</code> if a matching entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public ua.org.gostroy.guestbook.model.Entry fetchEntryByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.fetchEntryByUuidAndCompanyId(uuid, companyId);
+	}
+
+	/**
+	* Returns the entry matching the UUID and group.
+	*
+	* @param uuid the entry's UUID
+	* @param groupId the primary key of the group
+	* @return the matching entry, or <code>null</code> if a matching entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public ua.org.gostroy.guestbook.model.Entry fetchEntryByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.fetchEntryByUuidAndGroupId(uuid, groupId);
+	}
+
+	/**
 	* Returns the entry with the primary key.
 	*
 	* @param entryId the primary key of the entry
@@ -206,6 +236,40 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _entryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	/**
+	* Returns the entry with the matching UUID and company.
+	*
+	* @param uuid the entry's UUID
+	* @param companyId the primary key of the company
+	* @return the matching entry
+	* @throws PortalException if a matching entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public ua.org.gostroy.guestbook.model.Entry getEntryByUuidAndCompanyId(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.getEntryByUuidAndCompanyId(uuid, companyId);
+	}
+
+	/**
+	* Returns the entry matching the UUID and group.
+	*
+	* @param uuid the entry's UUID
+	* @param groupId the primary key of the group
+	* @return the matching entry
+	* @throws PortalException if a matching entry could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public ua.org.gostroy.guestbook.model.Entry getEntryByUuidAndGroupId(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.getEntryByUuidAndGroupId(uuid, groupId);
 	}
 
 	/**

@@ -37,9 +37,11 @@ import java.util.Date;
 public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{entryId=");
+		sb.append("{uuid=");
+		sb.append(uuid);
+		sb.append(", entryId=");
 		sb.append(entryId);
 		sb.append(", groupId=");
 		sb.append(groupId);
@@ -69,6 +71,13 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 	@Override
 	public Entry toEntityModel() {
 		EntryImpl entryImpl = new EntryImpl();
+
+		if (uuid == null) {
+			entryImpl.setUuid(StringPool.BLANK);
+		}
+		else {
+			entryImpl.setUuid(uuid);
+		}
 
 		entryImpl.setEntryId(entryId);
 		entryImpl.setGroupId(groupId);
@@ -126,6 +135,7 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
+		uuid = objectInput.readUTF();
 		entryId = objectInput.readLong();
 		groupId = objectInput.readLong();
 		companyId = objectInput.readLong();
@@ -142,6 +152,13 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput objectOutput)
 		throws IOException {
+		if (uuid == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(uuid);
+		}
+
 		objectOutput.writeLong(entryId);
 		objectOutput.writeLong(groupId);
 		objectOutput.writeLong(companyId);
@@ -181,6 +198,7 @@ public class EntryCacheModel implements CacheModel<Entry>, Externalizable {
 		objectOutput.writeLong(guestbookId);
 	}
 
+	public String uuid;
 	public long entryId;
 	public long groupId;
 	public long companyId;

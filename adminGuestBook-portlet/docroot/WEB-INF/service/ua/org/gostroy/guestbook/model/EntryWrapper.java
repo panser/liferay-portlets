@@ -14,6 +14,7 @@
 
 package ua.org.gostroy.guestbook.model;
 
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ModelWrapper;
 
@@ -49,6 +50,7 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("entryId", getEntryId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -66,6 +68,12 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long entryId = (Long)attributes.get("entryId");
 
 		if (entryId != null) {
@@ -151,6 +159,26 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		_entry.setPrimaryKey(primaryKey);
+	}
+
+	/**
+	* Returns the uuid of this entry.
+	*
+	* @return the uuid of this entry
+	*/
+	@Override
+	public java.lang.String getUuid() {
+		return _entry.getUuid();
+	}
+
+	/**
+	* Sets the uuid of this entry.
+	*
+	* @param uuid the uuid of this entry
+	*/
+	@Override
+	public void setUuid(java.lang.String uuid) {
+		_entry.setUuid(uuid);
 	}
 
 	/**
@@ -516,6 +544,11 @@ public class EntryWrapper implements Entry, ModelWrapper<Entry> {
 		}
 
 		return false;
+	}
+
+	@Override
+	public StagedModelType getStagedModelType() {
+		return _entry.getStagedModelType();
 	}
 
 	/**

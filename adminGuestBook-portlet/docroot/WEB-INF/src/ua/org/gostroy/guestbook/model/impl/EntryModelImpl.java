@@ -17,6 +17,7 @@ package ua.org.gostroy.guestbook.model.impl;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -65,6 +66,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	 */
 	public static final String TABLE_NAME = "GB_Entry";
 	public static final Object[][] TABLE_COLUMNS = {
+			{ "uuid_", Types.VARCHAR },
 			{ "entryId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
@@ -77,7 +79,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 			{ "message", Types.VARCHAR },
 			{ "guestbookId", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table GB_Entry (entryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,email VARCHAR(75) null,message VARCHAR(75) null,guestbookId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table GB_Entry (uuid_ VARCHAR(75) null,entryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,email VARCHAR(75) null,message VARCHAR(75) null,guestbookId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table GB_Entry";
 	public static final String ORDER_BY_JPQL = " ORDER BY entry.entryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY GB_Entry.entryId ASC";
@@ -93,9 +95,11 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.ua.org.gostroy.guestbook.model.Entry"),
 			true);
-	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long GUESTBOOKID_COLUMN_BITMASK = 2L;
-	public static long ENTRYID_COLUMN_BITMASK = 4L;
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long GUESTBOOKID_COLUMN_BITMASK = 4L;
+	public static long UUID_COLUMN_BITMASK = 8L;
+	public static long ENTRYID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -110,6 +114,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 		Entry model = new EntryImpl();
 
+		model.setUuid(soapModel.getUuid());
 		model.setEntryId(soapModel.getEntryId());
 		model.setGroupId(soapModel.getGroupId());
 		model.setCompanyId(soapModel.getCompanyId());
@@ -185,6 +190,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
+		attributes.put("uuid", getUuid());
 		attributes.put("entryId", getEntryId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("companyId", getCompanyId());
@@ -202,6 +208,12 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
 		Long entryId = (Long)attributes.get("entryId");
 
 		if (entryId != null) {
@@ -271,6 +283,30 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@JSON
 	@Override
+	public String getUuid() {
+		if (_uuid == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _uuid;
+		}
+	}
+
+	@Override
+	public void setUuid(String uuid) {
+		if (_originalUuid == null) {
+			_originalUuid = _uuid;
+		}
+
+		_uuid = uuid;
+	}
+
+	public String getOriginalUuid() {
+		return GetterUtil.getString(_originalUuid);
+	}
+
+	@JSON
+	@Override
 	public long getEntryId() {
 		return _entryId;
 	}
@@ -311,7 +347,19 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
 	}
 
 	@JSON
@@ -444,6 +492,12 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 		return _originalGuestbookId;
 	}
 
+	@Override
+	public StagedModelType getStagedModelType() {
+		return new StagedModelType(PortalUtil.getClassNameId(
+				Entry.class.getName()));
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -475,6 +529,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public Object clone() {
 		EntryImpl entryImpl = new EntryImpl();
 
+		entryImpl.setUuid(getUuid());
 		entryImpl.setEntryId(getEntryId());
 		entryImpl.setGroupId(getGroupId());
 		entryImpl.setCompanyId(getCompanyId());
@@ -538,9 +593,15 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public void resetOriginalValues() {
 		EntryModelImpl entryModelImpl = this;
 
+		entryModelImpl._originalUuid = entryModelImpl._uuid;
+
 		entryModelImpl._originalGroupId = entryModelImpl._groupId;
 
 		entryModelImpl._setOriginalGroupId = false;
+
+		entryModelImpl._originalCompanyId = entryModelImpl._companyId;
+
+		entryModelImpl._setOriginalCompanyId = false;
 
 		entryModelImpl._originalGuestbookId = entryModelImpl._guestbookId;
 
@@ -552,6 +613,14 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	@Override
 	public CacheModel<Entry> toCacheModel() {
 		EntryCacheModel entryCacheModel = new EntryCacheModel();
+
+		entryCacheModel.uuid = getUuid();
+
+		String uuid = entryCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			entryCacheModel.uuid = null;
+		}
 
 		entryCacheModel.entryId = getEntryId();
 
@@ -618,9 +687,11 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
-		sb.append("{entryId=");
+		sb.append("{uuid=");
+		sb.append(getUuid());
+		sb.append(", entryId=");
 		sb.append(getEntryId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
@@ -649,12 +720,16 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("ua.org.gostroy.guestbook.model.Entry");
 		sb.append("</model-name>");
 
+		sb.append(
+			"<column><column-name>uuid</column-name><column-value><![CDATA[");
+		sb.append(getUuid());
+		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>entryId</column-name><column-value><![CDATA[");
 		sb.append(getEntryId());
@@ -707,11 +782,15 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	private static ClassLoader _classLoader = Entry.class.getClassLoader();
 	private static Class<?>[] _escapedModelInterfaces = new Class[] { Entry.class };
+	private String _uuid;
+	private String _originalUuid;
 	private long _entryId;
 	private long _groupId;
 	private long _originalGroupId;
 	private boolean _setOriginalGroupId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _userId;
 	private String _userUuid;
 	private String _userName;
