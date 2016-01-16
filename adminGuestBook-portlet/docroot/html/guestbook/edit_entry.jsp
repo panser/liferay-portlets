@@ -22,11 +22,23 @@
 	<aui:model-context bean="<%=entry%>" model="<%=Entry.class%>" />
 
 	<aui:fieldset>
-		<aui:input name="name" />
-		<aui:input name="email" />
-		<aui:input name="message" />
-		<aui:input name="guestbookId" type="hidden"
-			value='<%=entry == null ? guestbookId : entry.getGuestbookId()%>' />
+		<aui:input name="name">
+			<aui:validator name="required" errorMessage="Please enter your name." />
+		</aui:input>
+
+		<aui:input name="email">
+			<aui:validator name="email" />
+			<aui:validator name="required" />
+		</aui:input>
+
+		<aui:input id="message" type="textarea" name="message">
+			<aui:validator name="required" errorMessage="Please enter a message." />
+		</aui:input>
+		<div id="counterContainer"><p><span id="counter"></span> character(s) remaining</p></div>
+
+		<aui:input name='guestbookId' type='hidden'
+			value='<%=ParamUtil.getString(renderRequest, "guestbookId")%>' />
+
 		<aui:input name="entryId" type="hidden" />
 	</aui:fieldset>
 
@@ -56,3 +68,31 @@
 		<aui:button type="cancel" onClick="<%= viewURL %>"></aui:button>
 	</aui:button-row>
 </aui:form>
+
+
+<aui:script use="aui-char-counter">
+AUI().use(
+  function(A) {
+    new A.CharCounter(
+      {
+        counter: '#counter',
+        input: '#<portlet:namespace />message',
+        maxLength: 140
+      }
+    );
+  }
+);
+
+AUI().use(
+  'aui-char-counter',
+  function(A) {
+	  new A.CharCounter(
+		  {
+			  counter: '#counter',
+			  input: '#<portlet:namespace />message',
+			  maxLength: 140
+		  }
+		);
+  }
+);
+</aui:script> 
