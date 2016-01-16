@@ -8,6 +8,9 @@
 		<icon>/entry.png</icon>
 		<indexer-class>ua.org.gostroy.guestbook.search.EntryIndexer</indexer-class>
 		<indexer-class>ua.org.gostroy.guestbook.search.GuestbookIndexer</indexer-class>
+		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
+	    <friendly-url-mapping>guestbook</friendly-url-mapping>
+	    <friendly-url-routes>ua/org/gostroy/guestbook/portlet/guestbook-friendly-url-routes.xml</friendly-url-routes>
 		<asset-renderer-factory>ua.org.gostroy.guestbook.asset.EntryAssetRendererFactory</asset-renderer-factory>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>
