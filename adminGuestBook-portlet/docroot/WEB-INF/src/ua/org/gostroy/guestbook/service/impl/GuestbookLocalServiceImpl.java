@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
@@ -31,6 +32,7 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetLinkConstants;
 
 import ua.org.gostroy.guestbook.GuestbookNameException;
+import ua.org.gostroy.guestbook.NoSuchGuestbookException;
 import ua.org.gostroy.guestbook.model.Entry;
 import ua.org.gostroy.guestbook.model.Guestbook;
 import ua.org.gostroy.guestbook.service.EntryLocalServiceUtil;
@@ -57,6 +59,10 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil} to access the guestbook local service.
 	 */
 	
+	public Guestbook getGuestbookByG_N(long groupId, String name, OrderByComparator orderByComparator) throws SystemException, NoSuchGuestbookException {
+	    return guestbookPersistence.findByG_N_First(groupId, name, orderByComparator);
+	}
+
 	public List<Guestbook> getGuestbooks (long groupId) throws SystemException {
 	    return guestbookPersistence.findByGroupId(groupId);
 	}

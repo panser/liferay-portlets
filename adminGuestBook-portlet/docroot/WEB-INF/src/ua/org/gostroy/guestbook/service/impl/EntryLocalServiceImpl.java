@@ -56,6 +56,10 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link ua.org.gostroy.guestbook.service.EntryLocalServiceUtil} to access the entry local service.
 	 */
 	
+	public List<Entry> getEntriesByG_G_N(long groupId, long guestbookId, String name) throws SystemException {
+	    return entryPersistence.findByG_G_N(groupId, guestbookId, name);
+	}	
+	
 	public List<Entry> getEntries(long groupId, long guestbookId) throws SystemException {
 	    return entryPersistence.findByG_G(groupId, guestbookId);
 	}
