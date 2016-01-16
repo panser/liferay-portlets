@@ -77,7 +77,12 @@
 
     <liferay-ui:search-container-row className="ua.org.gostroy.guestbook.model.Entry" modelVar="entry">
 
-        <liferay-ui:search-container-column-text property="message" />
+        <portlet:renderURL var="viewEntry">
+	        <portlet:param name="mvcPath" value="/html/guestbook/view_entry.jsp" />
+	        <portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+		</portlet:renderURL>
+		<liferay-ui:search-container-column-text property="message" href="<%= viewEntry %>"/>
+
         <liferay-ui:search-container-column-text property="name" />
         <liferay-ui:search-container-column-jsp path="/html/guestbook/guestbook_actions.jsp" align="right" />
 
