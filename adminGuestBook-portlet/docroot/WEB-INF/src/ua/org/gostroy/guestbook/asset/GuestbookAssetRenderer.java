@@ -111,7 +111,7 @@ public class GuestbookAssetRenderer extends BaseAssetRenderer {
 	
 	@Override
 	protected String getIconPath(ThemeDisplay themeDisplay) {
-	        return themeDisplay.getURLPortal() + "/guestbook-portlet/guestbook.png";
+	        return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/guestbook.png";
 	}
 
 	private Log _log;

@@ -110,7 +110,7 @@ public class EntryAssetRenderer extends BaseAssetRenderer {
 	
 	@Override
 	protected String getIconPath(ThemeDisplay themeDisplay) {
-	        return themeDisplay.getURLPortal() + "/guestbook-portlet/entry.png";
+	        return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/entry.png";
 	}
 
 	private Log _log;
