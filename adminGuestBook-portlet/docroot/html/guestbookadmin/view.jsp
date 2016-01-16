@@ -18,7 +18,12 @@
             total="<%= GuestbookLocalServiceUtil.getGuestbooksCount(scopeGroupId) %>" />
 
 	<liferay-ui:search-container-row className="ua.org.gostroy.guestbook.model.Guestbook" modelVar="guestbook">
-		<liferay-ui:search-container-column-text property="name" />
+		<portlet:renderURL var="viewGuestbook">
+	        <portlet:param name="mvcPath" value="/html/guestbookadmin/view_guestbook.jsp" />
+	        <portlet:param name="guestbookId" value="<%= String.valueOf(guestbook.getGuestbookId()) %>" />
+		</portlet:renderURL>
+		<liferay-ui:search-container-column-text property="name" href="<%= viewGuestbook %>" />
+
 		<liferay-ui:search-container-column-jsp path="/html/guestbookadmin/guestbook_actions.jsp" align="right" />
 	</liferay-ui:search-container-row>
 
