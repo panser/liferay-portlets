@@ -5,7 +5,7 @@
 	
 	<portlet>
 		<portlet-name>guest-book</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/entry.png</icon>
 		<indexer-class>ua.org.gostroy.guestbook.search.EntryIndexer</indexer-class>
 		<indexer-class>ua.org.gostroy.guestbook.search.GuestbookIndexer</indexer-class>
 		<asset-renderer-factory>ua.org.gostroy.guestbook.asset.EntryAssetRendererFactory</asset-renderer-factory>
@@ -17,7 +17,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>guestbook-admin</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/guestbook.png</icon>
 		<control-panel-entry-category>
 			site_administration.content
 		</control-panel-entry-category>
