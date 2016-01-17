@@ -11,14 +11,11 @@
 
 	String guestbookName = ParamUtil.getString(renderRequest, "guestbookName");
 
-	OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil
-			.getOrderByComparatorFactory();
+	OrderByComparatorFactory orderByComparatorFactory = OrderByComparatorFactoryUtil.getOrderByComparatorFactory();
 	OrderByComparator orderByComparator = orderByComparatorFactory.create("Entry", "name", true);
-	Guestbook guestbook = GuestbookLocalServiceUtil.getGuestbookByG_N(scopeGroupId, guestbookName,
-			orderByComparator);
+	Guestbook guestbook = GuestbookLocalServiceUtil.getGuestbookByG_N(scopeGroupId, guestbookName, orderByComparator);
 
-	List<Entry> entries = EntryLocalServiceUtil.getEntriesByG_G_N(scopeGroupId, guestbook.getGuestbookId(),
-			name);
+	List<Entry> entries = EntryLocalServiceUtil.getEntriesByG_G_N(scopeGroupId, guestbook.getGuestbookId(), name);
 
 	for (Entry entry : entries) {
 		entry = entry.toEscapedModel();
@@ -46,33 +43,22 @@
 </dl>
 
 <c:if test="<%=themeDisplay.isSignedIn()%>">
-	<liferay-ui:panel-container extended="<%=false%>"
-		id="entryCollaborationPanelContainer" persistState="<%=true%>">
-		<liferay-ui:panel collapsible="<%=true%>" extended="<%=true%>"
-			id="entryCollaborationPanel" persistState="<%=true%>"
-			title='<%=LanguageUtil.get(pageContext, "collaboration")%>'>
-			<liferay-ui:ratings className="<%=Entry.class.getName()%>"
-				classPK="<%=entry.getEntryId()%>" type="stars" />
+	<liferay-ui:panel-container extended="<%=false%>" id="entryCollaborationPanelContainer" persistState="<%=true%>">
+		<liferay-ui:panel collapsible="<%=true%>" extended="<%=true%>" id="entryCollaborationPanel" persistState="<%=true%>" title='<%=LanguageUtil.get(pageContext, "collaboration")%>'>
+			<liferay-ui:ratings className="<%=Entry.class.getName()%>" classPK="<%=entry.getEntryId()%>" type="stars" />
 
 			<br />
 
 			<portlet:actionURL name="invokeTaglibDiscussion" var="discussionURL" />
 
-			<liferay-ui:discussion className="<%=Entry.class.getName()%>"
-				classPK="<%=entry.getEntryId()%>"
-				formAction="<%=discussionURL%>" formName="fm2"
-				ratingsEnabled="<%=true%>" redirect="<%=currentURL%>"
-				subject="<%=entry.getMessage()%>"
-				userId="<%=entry.getUserId()%>" />
+			<liferay-ui:discussion className="<%=Entry.class.getName()%>" classPK="<%=entry.getEntryId()%>" formAction="<%=discussionURL%>" formName="fm2" ratingsEnabled="<%=true%>" redirect="<%=currentURL%>"
+				subject="<%=entry.getMessage()%>" userId="<%=entry.getUserId()%>" />
 
 		</liferay-ui:panel>
 	</liferay-ui:panel-container>
 </c:if>
 
-<liferay-ui:asset-links
-	assetEntryId="<%=(assetEntry != null) ? assetEntry.getEntryId() : 0%>"
-	className="<%=Entry.class.getName()%>"
-	classPK="<%=entry.getEntryId()%>" />
+<liferay-ui:asset-links assetEntryId="<%=(assetEntry != null) ? assetEntry.getEntryId() : 0%>" className="<%=Entry.class.getName()%>" classPK="<%=entry.getEntryId()%>" />
 
 <%
 	}

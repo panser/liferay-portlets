@@ -2,7 +2,7 @@
 
 <%
 	Guestbook guestbook = (Guestbook) renderRequest.getAttribute(WebKeys.GUESTBOOK);
-	
+
 	long entryId = ParamUtil.getLong(renderRequest, "entryId");
 
 	Entry entry = null;
@@ -16,11 +16,11 @@
 
 <portlet:renderURL var="viewURL">
 	<portlet:param name="mvcPath" value="/html/guestbook/view.jsp"></portlet:param>
-	<portlet:param name="guestbookName" value="<%= guestbook.getName() %>"/>
+	<portlet:param name="guestbookName" value="<%=guestbook.getName()%>" />
 </portlet:renderURL>
 
 <portlet:actionURL name="addEntry" var="addEntryURL">
-	<portlet:param name="guestbookName" value="<%= guestbook.getName() %>"/>
+	<portlet:param name="guestbookName" value="<%=guestbook.getName()%>" />
 </portlet:actionURL>
 
 
@@ -40,62 +40,61 @@
 		<aui:input id="message" type="textarea" name="message">
 			<aui:validator name="required" errorMessage="Please enter a message." />
 		</aui:input>
-		<div id="counterContainer"><p><span id="counter"></span> character(s) remaining</p></div>
+		<div id="counterContainer">
+			<p>
+				<span id="counter"></span> character(s) remaining
+			</p>
+		</div>
 
-		<aui:input name='guestbookId' type='hidden' value='<%= String.valueOf(guestbook.getGuestbookId()) %>'/>
+		<aui:input name='guestbookId' type='hidden' value='<%=String.valueOf(guestbook.getGuestbookId())%>' />
 
 		<aui:input name="entryId" type="hidden" />
 	</aui:fieldset>
-	
-	<liferay-ui:panel defaultState="closed" extended="<%=false%>"
-		id="populatePanel" persistState="<%=true%>" title="populate">
-	
+
+	<liferay-ui:panel defaultState="closed" extended="<%=false%>" id="populatePanel" persistState="<%=true%>" title="populate">
+
 		<c:if test="<%=themeDisplay.isSignedIn()%>">
 			<aui:button-row>
 				<aui:button id="useNameButton" value="Use My Full Name">
 				</aui:button>
 			</aui:button-row>
 		</c:if>
-	
+
 		<c:if test="<%=themeDisplay.isSignedIn()%>">
-	
+
 			<aui:button-row>
 				<aui:button id="useEmailButton" value="Use My Email Address">
 				</aui:button>
 			</aui:button-row>
-	
+
 		</c:if>
-	
+
 		<aui:button-row>
-		        <aui:button 
-		            id="generateMessagesButton" 
-		            value="Generate Sample Messages">
-		        </aui:button>
+			<aui:button id="generateMessagesButton" value="Generate Sample Messages">
+			</aui:button>
 		</aui:button-row>
-		
+
 		<div id="messages">
-		        <aui:layout>
-		                <aui:column>
-		                        <div id="message1-div"></div>
-		                </aui:column>
-		
-		                <aui:column>
-		                        <div id="message2-div"></div>
-		                </aui:column>
-		
-		                <aui:column>
-		                        <div id="message3-div"></div>
-		                </aui:column>
-		        </aui:layout>
+			<aui:layout>
+				<aui:column>
+					<div id="message1-div"></div>
+				</aui:column>
+
+				<aui:column>
+					<div id="message2-div"></div>
+				</aui:column>
+
+				<aui:column>
+					<div id="message3-div"></div>
+				</aui:column>
+			</aui:layout>
 		</div>
 	</liferay-ui:panel>
-		
+
 
 	<liferay-ui:asset-categories-error />
 	<liferay-ui:asset-tags-error />
-	<liferay-ui:panel defaultState="closed" extended="<%=false%>"
-		id="entryCategorizationPanel" persistState="<%=true%>"
-		title="categorization">
+	<liferay-ui:panel defaultState="closed" extended="<%=false%>" id="entryCategorizationPanel" persistState="<%=true%>" title="categorization">
 		<aui:fieldset>
 			<aui:input name="categories" type="assetCategories" />
 
@@ -103,12 +102,9 @@
 		</aui:fieldset>
 	</liferay-ui:panel>
 
-	<liferay-ui:panel defaultState="closed" extended="<%=false%>"
-		id="entryAssetLinksPanel" persistState="<%=true%>"
-		title="related-assets">
+	<liferay-ui:panel defaultState="closed" extended="<%=false%>" id="entryAssetLinksPanel" persistState="<%=true%>" title="related-assets">
 		<aui:fieldset>
-			<liferay-ui:input-asset-links
-				className="<%=Entry.class.getName()%>" classPK="<%=entryId%>" />
+			<liferay-ui:input-asset-links className="<%=Entry.class.getName()%>" classPK="<%=entryId%>" />
 		</aui:fieldset>
 	</liferay-ui:panel>
 
@@ -147,7 +143,13 @@
     });
     </aui:script>
 					
-</c:if>
+
+
+
+
+
+
+				</c:if>
 
 
 <aui:script use="aui-char-counter">
@@ -163,7 +165,13 @@ AUI().use(
   }
 );
 
-</aui:script> 
+</aui:script>
+	
+
+
+
+
+
 
 <aui:script use="node, event">
 	var generateMessagesButton = A.one('#generateMessagesButton');
