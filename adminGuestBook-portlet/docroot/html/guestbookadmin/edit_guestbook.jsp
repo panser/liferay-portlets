@@ -15,11 +15,10 @@
 <portlet:actionURL
 	name='<%=guestbook == null ? "addGuestbook" : "updateGuestbook"%>'
 	var="editGuestbookURL" />
+<liferay-ui:error key="existing-guestbook" message="existing-guestbook" />
 
-<aui:form action="<%=editGuestbookURL%>"
-	name="<portlet:namespace />fm">
-	<aui:model-context bean="<%=guestbook%>"
-		model="<%=Guestbook.class%>" />
+<aui:form action="<%=editGuestbookURL%>" name="<portlet:namespace />fm">
+	<aui:model-context bean="<%=guestbook%>" model="<%=Guestbook.class%>" />
 
 	<aui:fieldset>
 		<aui:input type="hidden" name="guestbookId"

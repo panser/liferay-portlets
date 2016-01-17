@@ -42,10 +42,14 @@ import ua.org.gostroy.guestbook.service.base.GuestbookLocalServiceBaseImpl;
  * The implementation of the guestbook local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link ua.org.gostroy.guestbook.service.GuestbookLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are
+ * added, rerun ServiceBuilder to copy their definitions into the
+ * {@link ua.org.gostroy.guestbook.service.GuestbookLocalService} interface.
  *
  * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * This is a local service. Methods of this service will not have security
+ * checks based on the propagated JAAS credentials because this service can only
+ * be accessed from within the same VM.
  * </p>
  *
  * @author Sergey
@@ -56,134 +60,136 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil} to access the guestbook local service.
+	 * Never reference this interface directly. Always use {@link
+	 * ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil} to access the
+	 * guestbook local service.
 	 */
-	
-	public Guestbook getGuestbookByG_N(long groupId, String name, OrderByComparator orderByComparator) throws SystemException, NoSuchGuestbookException {
-	    return guestbookPersistence.findByG_N_First(groupId, name, orderByComparator);
+
+	public Guestbook getGuestbookByG_N(long groupId, String name, OrderByComparator orderByComparator)
+			throws SystemException, NoSuchGuestbookException {
+		return guestbookPersistence.findByG_N_First(groupId, name, orderByComparator);
 	}
 
-	public List<Guestbook> getGuestbooks (long groupId) throws SystemException {
-	    return guestbookPersistence.findByGroupId(groupId);
+	public List<Guestbook> getGuestbooks(long groupId) throws SystemException {
+		return guestbookPersistence.findByGroupId(groupId);
 	}
 
-	public List<Guestbook> getGuestbooks (long groupId, int start, int end) throws SystemException {
-	    return guestbookPersistence.findByGroupId(groupId, start, end);
+	public List<Guestbook> getGuestbooks(long groupId, int start, int end) throws SystemException {
+		return guestbookPersistence.findByGroupId(groupId, start, end);
 	}
-	
-	public Guestbook addGuestbook(long userId, String name,ServiceContext serviceContext) throws SystemException,PortalException {
 
-	    long groupId = serviceContext.getScopeGroupId();
-	    User user = userPersistence.findByPrimaryKey(userId);
-	    Date now = new Date();
-	    validate(name);
-	
-	    long guestbookId = counterLocalService.increment();
-	    Guestbook guestbook = guestbookPersistence.create(guestbookId);
-	
-	    guestbook.setUuid(serviceContext.getUuid());
-	    guestbook.setUserId(userId);
-	    guestbook.setGroupId(groupId);
-	    guestbook.setCompanyId(user.getCompanyId());
-	    guestbook.setUserName(user.getFullName());
-	    guestbook.setCreateDate(serviceContext.getCreateDate(now));
-	    guestbook.setModifiedDate(serviceContext.getModifiedDate(now));
-	    guestbook.setName(name);
-	    guestbook.setExpandoBridgeAttributes(serviceContext);
-	
-	    guestbookPersistence.update(guestbook);
-	
-	    resourceLocalService.addResources(user.getCompanyId(), groupId, userId, Guestbook.class.getName(), guestbookId, false, true, true);
-	
-	    AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId,
-	                    groupId, guestbook.getCreateDate(),
-	                    guestbook.getModifiedDate(), Guestbook.class.getName(),
-	                    guestbookId, guestbook.getUuid(), 0,
-	                    serviceContext.getAssetCategoryIds(),
-	                    serviceContext.getAssetTagNames(), true, null, null, null,
-	                    ContentTypes.TEXT_HTML, guestbook.getName(), null, null, null,
-	                    null, 0, 0, null, false);
-	
-	    assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(),
-	                    serviceContext.getAssetLinkEntryIds(),
-	                    AssetLinkConstants.TYPE_RELATED);
-	
-	    Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
-	    indexer.reindex(guestbook);
-	
-	    return guestbook;
-	
-	}
-	
-	public Guestbook updateGuestbook(long userId, long guestbookId, String name, ServiceContext serviceContext) throws PortalException, SystemException {
-	
-	    Date now = new Date();
-	    validate(name);
-	    Guestbook guestbook = getGuestbook(guestbookId);
-	    User user = UserLocalServiceUtil.getUser(userId);
-	
-	    guestbook.setUserId(userId);
-	    guestbook.setUserName(user.getFullName());
-	    guestbook.setModifiedDate(serviceContext.getModifiedDate(now));
-	    guestbook.setName(name);
-	    guestbook.setExpandoBridgeAttributes(serviceContext);
-	
-	    guestbookPersistence.update(guestbook);
-	    resourceLocalService.updateResources(serviceContext.getCompanyId(),
-	                    serviceContext.getScopeGroupId(), name, guestbookId,
-	                    serviceContext.getGroupPermissions(),
-	                    serviceContext.getGuestPermissions());
-	
-	    AssetEntry assetEntry = assetEntryLocalService.updateEntry(guestbook.getUserId(),
-	                    guestbook.getGroupId(), guestbook.getCreateDate(),
-	                    guestbook.getModifiedDate(), Guestbook.class.getName(),
-	                    guestbookId, guestbook.getUuid(), 0,
-	                    serviceContext.getAssetCategoryIds(),
-	                    serviceContext.getAssetTagNames(), true, null, null, null,
-	                    ContentTypes.TEXT_HTML, guestbook.getName(), null, null, null,
-	                    null, 0, 0, null, false);
-	
-	    assetLinkLocalService.updateLinks(serviceContext.getUserId(),
-	                    assetEntry.getEntryId(), serviceContext.getAssetLinkEntryIds(),
-	                    AssetLinkConstants.TYPE_RELATED);
-	
-	    Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
-	    indexer.reindex(guestbook);
-	
-	    return guestbook;
-	}
-	
-	public Guestbook deleteGuestbook(long guestbookId, ServiceContext serviceContext) throws PortalException, SystemException {
+	public Guestbook addGuestbook(long userId, String name, ServiceContext serviceContext)
+			throws SystemException, PortalException {
 
-	    Guestbook guestbook = getGuestbook(guestbookId);
-	    List<Entry> entries = EntryLocalServiceUtil.getEntries(serviceContext.getScopeGroupId(), guestbookId);
-	
-	    for (Entry entry : entries) {
-            EntryLocalServiceUtil.deleteEntry(entry.getEntryId(),serviceContext);
-	    }
-	
-	    resourceLocalService.deleteResource(serviceContext.getCompanyId(), Guestbook.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,guestbookId);
-	
-	    AssetEntry assetEntry = assetEntryLocalService.fetchEntry(Guestbook.class.getName(), guestbookId);
-	
-	    assetLinkLocalService.deleteLinks(assetEntry.getEntryId());
-	    assetEntryLocalService.deleteEntry(assetEntry);
-	
-	    Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
-	    indexer.delete(guestbook);
-	    guestbook = deleteGuestbook(guestbookId);
-	
-	    return guestbook;
-	}	
-	
+		long groupId = serviceContext.getScopeGroupId();
+		List<Guestbook> test = guestbookPersistence.findByG_N(groupId, name);
+
+		if (test.size() > 0) {
+			throw new PortalException("existing-guestbook");
+		}
+
+		User user = userPersistence.findByPrimaryKey(userId);
+		Date now = new Date();
+		validate(name);
+
+		long guestbookId = counterLocalService.increment();
+		Guestbook guestbook = guestbookPersistence.create(guestbookId);
+
+		guestbook.setUuid(serviceContext.getUuid());
+		guestbook.setUserId(userId);
+		guestbook.setGroupId(groupId);
+		guestbook.setCompanyId(user.getCompanyId());
+		guestbook.setUserName(user.getFullName());
+		guestbook.setCreateDate(serviceContext.getCreateDate(now));
+		guestbook.setModifiedDate(serviceContext.getModifiedDate(now));
+		guestbook.setName(name);
+		guestbook.setExpandoBridgeAttributes(serviceContext);
+
+		guestbookPersistence.update(guestbook);
+
+		resourceLocalService.addResources(user.getCompanyId(), groupId, userId, Guestbook.class.getName(), guestbookId,
+				false, true, true);
+
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(userId, groupId, guestbook.getCreateDate(),
+				guestbook.getModifiedDate(), Guestbook.class.getName(), guestbookId, guestbook.getUuid(), 0,
+				serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(), true, null, null, null,
+				ContentTypes.TEXT_HTML, guestbook.getName(), null, null, null, null, 0, 0, null, false);
+
+		assetLinkLocalService.updateLinks(userId, assetEntry.getEntryId(), serviceContext.getAssetLinkEntryIds(),
+				AssetLinkConstants.TYPE_RELATED);
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
+		indexer.reindex(guestbook);
+
+		return guestbook;
+
+	}
+
+	public Guestbook updateGuestbook(long userId, long guestbookId, String name, ServiceContext serviceContext)
+			throws PortalException, SystemException {
+
+		Date now = new Date();
+		validate(name);
+		Guestbook guestbook = getGuestbook(guestbookId);
+		User user = UserLocalServiceUtil.getUser(userId);
+
+		guestbook.setUserId(userId);
+		guestbook.setUserName(user.getFullName());
+		guestbook.setModifiedDate(serviceContext.getModifiedDate(now));
+		guestbook.setName(name);
+		guestbook.setExpandoBridgeAttributes(serviceContext);
+
+		guestbookPersistence.update(guestbook);
+		resourceLocalService.updateResources(serviceContext.getCompanyId(), serviceContext.getScopeGroupId(), name,
+				guestbookId, serviceContext.getGroupPermissions(), serviceContext.getGuestPermissions());
+
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(guestbook.getUserId(), guestbook.getGroupId(),
+				guestbook.getCreateDate(), guestbook.getModifiedDate(), Guestbook.class.getName(), guestbookId,
+				guestbook.getUuid(), 0, serviceContext.getAssetCategoryIds(), serviceContext.getAssetTagNames(), true,
+				null, null, null, ContentTypes.TEXT_HTML, guestbook.getName(), null, null, null, null, 0, 0, null,
+				false);
+
+		assetLinkLocalService.updateLinks(serviceContext.getUserId(), assetEntry.getEntryId(),
+				serviceContext.getAssetLinkEntryIds(), AssetLinkConstants.TYPE_RELATED);
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
+		indexer.reindex(guestbook);
+
+		return guestbook;
+	}
+
+	public Guestbook deleteGuestbook(long guestbookId, ServiceContext serviceContext)
+			throws PortalException, SystemException {
+
+		Guestbook guestbook = getGuestbook(guestbookId);
+		List<Entry> entries = EntryLocalServiceUtil.getEntries(serviceContext.getScopeGroupId(), guestbookId);
+
+		for (Entry entry : entries) {
+			EntryLocalServiceUtil.deleteEntry(entry.getEntryId(), serviceContext);
+		}
+
+		resourceLocalService.deleteResource(serviceContext.getCompanyId(), Guestbook.class.getName(),
+				ResourceConstants.SCOPE_INDIVIDUAL, guestbookId);
+
+		AssetEntry assetEntry = assetEntryLocalService.fetchEntry(Guestbook.class.getName(), guestbookId);
+
+		assetLinkLocalService.deleteLinks(assetEntry.getEntryId());
+		assetEntryLocalService.deleteEntry(assetEntry);
+
+		Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Guestbook.class);
+		indexer.delete(guestbook);
+		guestbook = deleteGuestbook(guestbookId);
+
+		return guestbook;
+	}
+
 	public int getGuestbooksCount(long groupId) throws SystemException {
-        return guestbookPersistence.countByGroupId(groupId);
+		return guestbookPersistence.countByGroupId(groupId);
 	}
-	
-	
-	protected void validate (String name) throws PortalException {
-	    if (Validator.isNull(name)) {
-	       throw new GuestbookNameException();
-	    }
+
+	protected void validate(String name) throws PortalException {
+		if (Validator.isNull(name)) {
+			throw new GuestbookNameException();
+		}
 	}
 }
