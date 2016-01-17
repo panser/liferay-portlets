@@ -93,7 +93,7 @@ public class EntryAssetRenderer extends BaseAssetRenderer {
 
 	@Override
 	public String getUuid() {
-//		return _entry.getUuid();
+		// return _entry.getUuid();
 		return null;
 	}
 
@@ -107,10 +107,10 @@ public class EntryAssetRenderer extends BaseAssetRenderer {
 			return null;
 		}
 	}
-	
+
 	@Override
 	protected String getIconPath(ThemeDisplay themeDisplay) {
-	        return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/entry.png";
+		return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/entry.png";
 	}
 
 	private Log _log;

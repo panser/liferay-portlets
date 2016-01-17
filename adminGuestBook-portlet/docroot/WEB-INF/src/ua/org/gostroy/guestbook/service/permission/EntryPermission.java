@@ -8,18 +8,18 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 public class EntryPermission {
-	
-    public static void check(PermissionChecker permissionChecker, long entryId, String actionId) throws PortalException, SystemException {
 
-        if (!contains(permissionChecker, entryId, actionId)) {
-            throw new PrincipalException();
-        }
-    }
+	public static void check(PermissionChecker permissionChecker, long entryId, String actionId) throws PortalException, SystemException {
 
-    public static boolean contains(PermissionChecker permissionChecker, long entryId, String actionId) throws PortalException, SystemException {
+		if (!contains(permissionChecker, entryId, actionId)) {
+			throw new PrincipalException();
+		}
+	}
 
-        Entry entry = EntryLocalServiceUtil.getEntry(entryId);
-        return permissionChecker.hasPermission(entry.getGroupId(), Entry.class.getName(), entry.getEntryId(), actionId);
+	public static boolean contains(PermissionChecker permissionChecker, long entryId, String actionId) throws PortalException, SystemException {
 
-    }
+		Entry entry = EntryLocalServiceUtil.getEntry(entryId);
+		return permissionChecker.hasPermission(entry.getGroupId(), Entry.class.getName(), entry.getEntryId(), actionId);
+
+	}
 }

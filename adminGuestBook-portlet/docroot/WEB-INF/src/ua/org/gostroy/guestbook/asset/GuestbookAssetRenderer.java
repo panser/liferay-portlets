@@ -94,7 +94,7 @@ public class GuestbookAssetRenderer extends BaseAssetRenderer {
 
 	@Override
 	public String getUuid() {
-//		return _guestbook.getUuid();
+		// return _guestbook.getUuid();
 		return null;
 	}
 
@@ -108,10 +108,10 @@ public class GuestbookAssetRenderer extends BaseAssetRenderer {
 			return null;
 		}
 	}
-	
+
 	@Override
 	protected String getIconPath(ThemeDisplay themeDisplay) {
-	        return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/guestbook.png";
+		return themeDisplay.getURLPortal() + "/adminGuestBook-portlet/guestbook.png";
 	}
 
 	private Log _log;

@@ -29,12 +29,11 @@ import ua.org.gostroy.guestbook.util.PortletKeys;
 public class GuestbookIndexer extends BaseIndexer {
 
 	public static final String[] CLASS_NAMES = { Guestbook.class.getName() };
-	public static final String PORTLET_ID = PortletKeys.GUESTBOOK_ADMIN;	
+	public static final String PORTLET_ID = PortletKeys.GUESTBOOK_ADMIN;
 
 	public GuestbookIndexer() {
 		setPermissionAware(true);
 	}
-
 
 	@Override
 	public String[] getClassNames() {
@@ -102,7 +101,6 @@ public class GuestbookIndexer extends BaseIndexer {
 		return PORTLET_ID;
 	}
 
-	
 	protected void reindexEntries(long companyId) throws PortalException, SystemException {
 		final Collection<Document> documents = new ArrayList<Document>();
 

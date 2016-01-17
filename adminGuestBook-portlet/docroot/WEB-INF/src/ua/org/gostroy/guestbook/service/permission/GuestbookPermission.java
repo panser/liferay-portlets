@@ -8,17 +8,17 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
 public class GuestbookPermission {
-	
-    public static void check(PermissionChecker permissionChecker, long guestbookId, String actionId) throws PortalException, SystemException {
 
-        if (!contains(permissionChecker, guestbookId, actionId)) {
-            throw new PrincipalException();
-        }
-    }
+	public static void check(PermissionChecker permissionChecker, long guestbookId, String actionId) throws PortalException, SystemException {
 
-    public static boolean contains(PermissionChecker permissionChecker, long guestbookId, String actionId) throws PortalException, SystemException {
+		if (!contains(permissionChecker, guestbookId, actionId)) {
+			throw new PrincipalException();
+		}
+	}
 
-        Guestbook guestbook = GuestbookLocalServiceUtil.getGuestbook(guestbookId);
-        return permissionChecker.hasPermission(guestbook.getGroupId(), Guestbook.class.getName(), guestbook.getGuestbookId(), actionId);
-    }
+	public static boolean contains(PermissionChecker permissionChecker, long guestbookId, String actionId) throws PortalException, SystemException {
+
+		Guestbook guestbook = GuestbookLocalServiceUtil.getGuestbook(guestbookId);
+		return permissionChecker.hasPermission(guestbook.getGroupId(), Guestbook.class.getName(), guestbook.getGuestbookId(), actionId);
+	}
 }

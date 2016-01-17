@@ -31,7 +31,7 @@ public class EntryIndexer extends BaseIndexer {
 	public static final String[] CLASS_NAMES = { Entry.class.getName() };
 	public static final String PORTLET_ID = PortletKeys.GUESTBOOK;
 
-	public EntryIndexer() {	
+	public EntryIndexer() {
 		setPermissionAware(true);
 	}
 
