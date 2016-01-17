@@ -23,6 +23,9 @@ import com.liferay.portal.service.ServiceContext;
 import ua.org.gostroy.guestbook.model.Guestbook;
 import ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.base.GuestbookServiceBaseImpl;
+import ua.org.gostroy.guestbook.service.permission.GuestbookModelPermission;
+import ua.org.gostroy.guestbook.service.permission.GuestbookPermission;
+import ua.org.gostroy.guestbook.util.ActionKeys;
 
 /**
  * The implementation of the guestbook remote service.
@@ -53,28 +56,35 @@ public class GuestbookServiceImpl extends GuestbookServiceBaseImpl {
 
 	public Guestbook addGuestbook(long userId, String name, ServiceContext serviceContext) throws SystemException, PortalException {
 
+		GuestbookModelPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(), ActionKeys.ADD_GUESTBOOK);
+
 		return GuestbookLocalServiceUtil.addGuestbook(userId, name, serviceContext);
 	}
 
 	public Guestbook deleteGuestbook(long guestbookId, ServiceContext serviceContext) throws PortalException, SystemException {
 
-		return GuestbookLocalServiceUtil.deleteGuestbook(guestbookId);
-	}
+		GuestbookPermission.check(getPermissionChecker(), guestbookId, ActionKeys.DELETE);
 
-	public List<Guestbook> getGuestbooks(long groupId) throws SystemException {
-		return GuestbookLocalServiceUtil.getGuestbooks(groupId);
-	}
-
-	public List<Guestbook> getGuestbooks(long groupId, int start, int end) throws SystemException {
-		return GuestbookLocalServiceUtil.getGuestbooks(groupId, start, end);
-	}
-
-	public int getGuestbooksCount(long groupId) throws SystemException {
-		return GuestbookLocalServiceUtil.getGuestbooksCount();
+		return GuestbookLocalServiceUtil.deleteGuestbook(guestbookId, serviceContext);
 	}
 
 	public Guestbook updateGuestbook(long userId, long guestbookId, String name, ServiceContext serviceContext) throws PortalException, SystemException {
 
+		GuestbookPermission.check(getPermissionChecker(), guestbookId, ActionKeys.UPDATE);
+
 		return GuestbookLocalServiceUtil.updateGuestbook(userId, guestbookId, name, serviceContext);
-	}	
+	}
+
+	public List<Guestbook> getGuestbooks(long groupId) throws SystemException {
+		return guestbookPersistence.filterFindByGroupId(groupId);
+	}
+
+	public List<Guestbook> getGuestbooks(long groupId, int start, int end) throws SystemException {
+
+		return guestbookPersistence.filterFindByGroupId(groupId, start, end);
+	}
+
+	public int getGuestbooksCount(long groupId) throws SystemException {
+		return guestbookPersistence.filterCountByGroupId(groupId);
+	}
 }

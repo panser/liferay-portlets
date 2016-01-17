@@ -23,6 +23,9 @@ import com.liferay.portal.service.ServiceContext;
 import ua.org.gostroy.guestbook.model.Entry;
 import ua.org.gostroy.guestbook.service.EntryLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.base.EntryServiceBaseImpl;
+import ua.org.gostroy.guestbook.service.permission.EntryPermission;
+import ua.org.gostroy.guestbook.service.permission.GuestbookModelPermission;
+import ua.org.gostroy.guestbook.util.ActionKeys;
 
 /**
  * The implementation of the entry remote service.
@@ -53,31 +56,38 @@ public class EntryServiceImpl extends EntryServiceBaseImpl {
 
 	public Entry addEntry(long userId, long guestbookId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
 
+		GuestbookModelPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(), ActionKeys.ADD_ENTRY);
+
 		return EntryLocalServiceUtil.addEntry(userId, guestbookId, name, email, message, serviceContext);
 	}
 
 	public Entry deleteEntry(long entryId, ServiceContext serviceContext) throws PortalException, SystemException {
 
+		EntryPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(), ActionKeys.DELETE);
+
 		return EntryLocalServiceUtil.deleteEntry(entryId, serviceContext);
-	}
-
-	public List<Entry> getEntries(long groupId, long guestbookId) throws SystemException {
-
-		return EntryLocalServiceUtil.getEntries(groupId, guestbookId);
-	}
-
-	public List<Entry> getEntries(long groupId, long guestbookId, int start, int end) throws SystemException {
-
-		return EntryLocalServiceUtil.getEntries(groupId, guestbookId, start, end);
-	}
-
-	public int getEntriesCount(long groupId, long guestbookId) throws SystemException {
-
-		return EntryLocalServiceUtil.getEntriesCount(groupId, guestbookId);
 	}
 
 	public Entry updateEntry(long userId, long guestbookId, long entryId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
 
+		EntryPermission.check(getPermissionChecker(), serviceContext.getScopeGroupId(), ActionKeys.UPDATE);
+
 		return EntryLocalServiceUtil.updateEntry(userId, guestbookId, entryId, name, email, message, serviceContext);
 	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId) throws SystemException {
+
+		return entryPersistence.filterFindByG_G(groupId, guestbookId);
+	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId, int start, int end) throws SystemException {
+
+		return entryPersistence.filterFindByG_G(groupId, guestbookId, start, end);
+	}
+
+	public int getEntriesCount(long groupId, long guestbookId) throws SystemException {
+
+		return entryPersistence.filterCountByG_G(groupId, guestbookId);
+	}
+
 }
