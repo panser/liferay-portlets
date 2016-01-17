@@ -58,5 +58,8 @@
 <%@ page import="com.liferay.portal.kernel.util.OrderByComparatorFactory" %>
 <%@ page import="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil" %>
 
+<%@ page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %>
+
+
 <portlet:defineObjects />
 <theme:defineObjects />

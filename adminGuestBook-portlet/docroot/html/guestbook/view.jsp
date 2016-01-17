@@ -78,9 +78,11 @@
 
 <liferay-ui:search-container>
 	<liferay-ui:search-container-results
-		results="<%=EntryLocalServiceUtil.getEntries(scopeGroupId, guestbook.getGuestbookId(),
-						searchContainer.getStart(), searchContainer.getEnd())%>"
-		total="<%=EntryLocalServiceUtil.getEntriesCount()%>" />
+    results="<%=EntryLocalServiceUtil.getEntries(scopeGroupId,
+              guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED, searchContainer.getStart(),
+              searchContainer.getEnd())%>"
+    total="<%=EntryLocalServiceUtil.getEntriesCount(scopeGroupId,
+              guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED)%>" />
 
 	<liferay-ui:search-container-row
 		className="ua.org.gostroy.guestbook.model.Entry" modelVar="entry">
