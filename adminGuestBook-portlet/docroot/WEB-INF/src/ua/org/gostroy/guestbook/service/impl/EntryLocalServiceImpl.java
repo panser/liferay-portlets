@@ -76,6 +76,18 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entryPersistence.findByG_G(groupId, guestbookId, start, end);
 	}
 
+	public int getEntriesCount(long groupId, long guestbookId) throws SystemException {
+		return entryPersistence.countByG_G_S(groupId, guestbookId, WorkflowConstants.STATUS_APPROVED);
+	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId, int status, int start, int end) throws SystemException {
+		return entryPersistence.findByG_G_S(groupId, guestbookId, WorkflowConstants.STATUS_APPROVED, start, end);
+	}
+
+	public int getEntriesCount(long groupId, long guestbookId, int status) throws SystemException {
+		return entryPersistence.countByG_G_S(groupId, guestbookId, WorkflowConstants.STATUS_APPROVED);
+	}
+
 	public Entry addEntry(long userId, long guestbookId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
 		long groupId = serviceContext.getScopeGroupId();
 		User user = userPersistence.findByPrimaryKey(userId);
