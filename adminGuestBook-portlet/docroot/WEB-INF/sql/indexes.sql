@@ -9,6 +9,7 @@ create index IX_37DE20CD on GB_Entry3 (groupId, guestbookId);
 
 create index IX_9294AD47 on GB_Guestbook (groupId);
 create index IX_FA13ABC6 on GB_Guestbook (groupId, name);
+create index IX_A4D0B52D on GB_Guestbook (groupId, status);
 create index IX_ABB2E591 on GB_Guestbook (uuid_);
 create index IX_9314A9F7 on GB_Guestbook (uuid_, companyId);
 create unique index IX_EDD4239 on GB_Guestbook (uuid_, groupId);

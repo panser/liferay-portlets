@@ -372,6 +372,13 @@ public class GuestbookLocalServiceWrapper implements GuestbookLocalService,
 
 	@Override
 	public java.util.List<ua.org.gostroy.guestbook.model.Guestbook> getGuestbooks(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _guestbookLocalService.getGuestbooks(groupId, status);
+	}
+
+	@Override
+	public java.util.List<ua.org.gostroy.guestbook.model.Guestbook> getGuestbooks(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _guestbookLocalService.getGuestbooks(groupId, start, end);

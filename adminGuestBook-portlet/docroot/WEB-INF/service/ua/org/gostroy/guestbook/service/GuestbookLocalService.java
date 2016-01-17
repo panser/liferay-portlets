@@ -324,6 +324,11 @@ public interface GuestbookLocalService extends BaseLocalService,
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<ua.org.gostroy.guestbook.model.Guestbook> getGuestbooks(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<ua.org.gostroy.guestbook.model.Guestbook> getGuestbooks(
 		long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
