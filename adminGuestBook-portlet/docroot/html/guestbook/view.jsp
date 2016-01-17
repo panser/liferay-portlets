@@ -23,13 +23,13 @@
 <aui:nav cssClass="nav-tabs">
 
 	<%
-		List<Guestbook> guestbooks = GuestbookLocalServiceUtil.getGuestbooks(scopeGroupId);
+		List<Guestbook> guestbooks = GuestbookLocalServiceUtil.getGuestbooks(scopeGroupId, WorkflowConstants.STATUS_APPROVED);
 			for (int i = 0; i < guestbooks.size(); i++) {
 				Guestbook curGuestbook = (Guestbook) guestbooks.get(i);
 
 				String cssClass = StringPool.BLANK;
 
- 				if (curGuestbook.getGuestbookId() == guestbook.getGuestbookId()) {
+				if (curGuestbook.getGuestbookId() == guestbook.getGuestbookId()) {
 					cssClass = "active";
 				}
 
@@ -65,7 +65,8 @@
 			value="Add Guestbook" />
 	</c:if>
 
-	<c:if test='<%=GuestbookPermission.contains(permissionChecker, guestbook.getGuestbookId(), "ADD_ENTRY")%>'>
+	<c:if
+		test='<%=GuestbookPermission.contains(permissionChecker, guestbook.getGuestbookId(), "ADD_ENTRY")%>'>
 		<portlet:renderURL var="addEntryURL">
 			<portlet:param name="mvcPath" value="/html/guestbook/edit_entry.jsp" />
 			<portlet:param name="guestbookName" value="<%=guestbook.getName()%>" />
@@ -78,11 +79,8 @@
 
 <liferay-ui:search-container>
 	<liferay-ui:search-container-results
-    results="<%=EntryLocalServiceUtil.getEntries(scopeGroupId,
-              guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED, searchContainer.getStart(),
-              searchContainer.getEnd())%>"
-    total="<%=EntryLocalServiceUtil.getEntriesCount(scopeGroupId,
-              guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED)%>" />
+		results="<%=EntryLocalServiceUtil.getEntries(scopeGroupId, guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED, searchContainer.getStart(), searchContainer.getEnd())%>"
+		total="<%=EntryLocalServiceUtil.getEntriesCount(scopeGroupId, guestbook.getGuestbookId(), WorkflowConstants.STATUS_APPROVED)%>" />
 
 	<liferay-ui:search-container-row
 		className="ua.org.gostroy.guestbook.model.Entry" modelVar="entry">

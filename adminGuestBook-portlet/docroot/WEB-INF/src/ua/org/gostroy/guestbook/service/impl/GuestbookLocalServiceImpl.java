@@ -74,6 +74,10 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 	public List<Guestbook> getGuestbooks(long groupId) throws SystemException {
 		return guestbookPersistence.findByGroupId(groupId);
 	}
+	
+	public List<Guestbook> getGuestbooks(long groupId, int status) throws SystemException {
+	    return guestbookPersistence.findByG_S(groupId, WorkflowConstants.STATUS_APPROVED);
+	}
 
 	public List<Guestbook> getGuestbooks(long groupId, int start, int end) throws SystemException {
 		return guestbookPersistence.findByGroupId(groupId, start, end);
