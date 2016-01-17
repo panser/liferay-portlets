@@ -23,6 +23,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -89,6 +91,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	    entry.setName(name);
 	    entry.setEmail(email);
 	    entry.setMessage(message);
+	    entry.setStatus(WorkflowConstants.STATUS_DRAFT);
 	
 	    entryPersistence.update(entry);
 	    resourceLocalService.addResources(user.getCompanyId(), groupId, userId, Entry.class.getName(), entryId, false, true, true);
@@ -108,6 +111,10 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	    Indexer indexer = IndexerRegistryUtil.nullSafeGetIndexer(Entry.class);
 	    indexer.reindex(entry);
 	
+	    WorkflowHandlerRegistryUtil.startWorkflowInstance(entry.getCompanyId(), 
+	            entry.getGroupId(), entry.getUserId(), Entry.class.getName(), 
+	            entry.getPrimaryKey(), entry, serviceContext);
+	    
 	    return entry;
 	}
 	
@@ -167,6 +174,34 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	
 	    return entry;
 	}	
+	
+	 public Entry updateStatus(long userId, long guestbookId, long entryId, int status,
+	       ServiceContext serviceContext) throws PortalException,
+	       SystemException {
+
+	    User user = userLocalService.getUser(userId);
+	    Entry entry = getEntry(entryId);
+
+	    entry.setStatus(status);
+	    entry.setStatusByUserId(userId);
+	    entry.setStatusByUserName(user.getFullName());
+	    entry.setStatusDate(new Date());
+
+	    entryPersistence.update(entry);
+
+	    if (status == WorkflowConstants.STATUS_APPROVED) {
+
+	       assetEntryLocalService.updateVisible(Entry.class.getName(),
+	          entryId, true);
+
+	    } else {
+
+	       assetEntryLocalService.updateVisible(Entry.class.getName(),
+	          entryId, false);
+	    }
+
+	    return entry;
+	}
 	
 	protected void validate (String name, String email, String entry) throws PortalException {
 	    if (Validator.isNull(name)) {
