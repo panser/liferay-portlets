@@ -14,6 +14,14 @@
 
 package ua.org.gostroy.guestbook.service.impl;
 
+import java.util.List;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.ServiceContext;
+
+import ua.org.gostroy.guestbook.model.Guestbook;
+import ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.base.GuestbookServiceBaseImpl;
 
 /**
@@ -42,4 +50,31 @@ public class GuestbookServiceImpl extends GuestbookServiceBaseImpl {
 	 * ua.org.gostroy.guestbook.service.GuestbookServiceUtil} to access the
 	 * guestbook remote service.
 	 */
+
+	public Guestbook addGuestbook(long userId, String name, ServiceContext serviceContext) throws SystemException, PortalException {
+
+		return GuestbookLocalServiceUtil.addGuestbook(userId, name, serviceContext);
+	}
+
+	public Guestbook deleteGuestbook(long guestbookId, ServiceContext serviceContext) throws PortalException, SystemException {
+
+		return GuestbookLocalServiceUtil.deleteGuestbook(guestbookId);
+	}
+
+	public List<Guestbook> getGuestbooks(long groupId) throws SystemException {
+		return GuestbookLocalServiceUtil.getGuestbooks(groupId);
+	}
+
+	public List<Guestbook> getGuestbooks(long groupId, int start, int end) throws SystemException {
+		return GuestbookLocalServiceUtil.getGuestbooks(groupId, start, end);
+	}
+
+	public int getGuestbooksCount(long groupId) throws SystemException {
+		return GuestbookLocalServiceUtil.getGuestbooksCount();
+	}
+
+	public Guestbook updateGuestbook(long userId, long guestbookId, String name, ServiceContext serviceContext) throws PortalException, SystemException {
+
+		return GuestbookLocalServiceUtil.updateGuestbook(userId, guestbookId, name, serviceContext);
+	}	
 }

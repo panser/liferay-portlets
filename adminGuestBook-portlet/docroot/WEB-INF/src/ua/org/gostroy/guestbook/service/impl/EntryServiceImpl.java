@@ -14,6 +14,14 @@
 
 package ua.org.gostroy.guestbook.service.impl;
 
+import java.util.List;
+
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.ServiceContext;
+
+import ua.org.gostroy.guestbook.model.Entry;
+import ua.org.gostroy.guestbook.service.EntryLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.base.EntryServiceBaseImpl;
 
 /**
@@ -42,4 +50,34 @@ public class EntryServiceImpl extends EntryServiceBaseImpl {
 	 * ua.org.gostroy.guestbook.service.EntryServiceUtil} to access the entry
 	 * remote service.
 	 */
+
+	public Entry addEntry(long userId, long guestbookId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
+
+		return EntryLocalServiceUtil.addEntry(userId, guestbookId, name, email, message, serviceContext);
+	}
+
+	public Entry deleteEntry(long entryId, ServiceContext serviceContext) throws PortalException, SystemException {
+
+		return EntryLocalServiceUtil.deleteEntry(entryId, serviceContext);
+	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId) throws SystemException {
+
+		return EntryLocalServiceUtil.getEntries(groupId, guestbookId);
+	}
+
+	public List<Entry> getEntries(long groupId, long guestbookId, int start, int end) throws SystemException {
+
+		return EntryLocalServiceUtil.getEntries(groupId, guestbookId, start, end);
+	}
+
+	public int getEntriesCount(long groupId, long guestbookId) throws SystemException {
+
+		return EntryLocalServiceUtil.getEntriesCount(groupId, guestbookId);
+	}
+
+	public Entry updateEntry(long userId, long guestbookId, long entryId, String name, String email, String message, ServiceContext serviceContext) throws PortalException, SystemException {
+
+		return EntryLocalServiceUtil.updateEntry(userId, guestbookId, entryId, name, email, message, serviceContext);
+	}
 }
