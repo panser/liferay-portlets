@@ -5,7 +5,7 @@
 	<portlet>
 		<portlet-name>guest-book</portlet-name>
 		<display-name>Guest Book</display-name>
-		<portlet-class>ua.org.gostroy.guestbook.portlet.GuestBookPortlet</portlet-class>
+		<portlet-class>ua.org.gostroy.guestbook.portlet.GuestbookPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/guestbook/view.jsp</value>
