@@ -206,7 +206,7 @@ public class GuestbookLocalServiceImpl extends GuestbookLocalServiceBaseImpl {
 	    guestbook.setStatusByUserName(user.getFullName());
 	    guestbook.setStatusDate(new Date());
 
-	    entryPersistence.update(entry);
+	    guestbookPersistence.update(guestbook);
 
 	    if (status == WorkflowConstants.STATUS_APPROVED) {
 

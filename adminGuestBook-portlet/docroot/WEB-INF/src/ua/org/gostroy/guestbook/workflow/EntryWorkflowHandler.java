@@ -32,11 +32,12 @@ public class EntryWorkflowHandler extends BaseWorkflowHandler {
 	public Object updateStatus(int status, Map<String, Serializable> workflowContext) throws PortalException, SystemException {
 
 		long userId = GetterUtil.getLong((String) workflowContext.get(WorkflowConstants.CONTEXT_USER_ID));
+		long guestbookId = GetterUtil.getLong((String) workflowContext.get(WorkflowConstants.CONTEXT_ENTRY_CLASS_PK));
 		long entryId = GetterUtil.getLong((String) workflowContext.get(WorkflowConstants.CONTEXT_ENTRY_CLASS_PK));
 
 		ServiceContext serviceContext = (ServiceContext) workflowContext.get("serviceContext");
 
-		return EntryLocalServiceUtil.updateStatus(userId, entryId, status, serviceContext);
+		return EntryLocalServiceUtil.updateStatus(userId, guestbookId, entryId, status, serviceContext);
 
 	}
 
