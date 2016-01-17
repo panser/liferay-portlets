@@ -1,5 +1,6 @@
 create index IX_F5591FB6 on GB_Entry (groupId, guestbookId);
 create index IX_B00E4EF5 on GB_Entry (groupId, guestbookId, name);
+create index IX_C6AF489C on GB_Entry (groupId, guestbookId, status);
 create index IX_3BD8D300 on GB_Entry (uuid_);
 create index IX_B5EF5128 on GB_Entry (uuid_, companyId);
 create unique index IX_C1EA01AA on GB_Entry (uuid_, groupId);
