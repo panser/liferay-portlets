@@ -4,7 +4,7 @@
 	<author>Sergey</author>
 	<namespace>GB</namespace>
 
-	<entity name="Guestbook" local-service="true" uuid="true">
+	<entity name="Guestbook" local-service="true" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -58,7 +58,7 @@
 	</entity>
 	
 	
-	<entity name="Entry" local-service="true" uuid="true">
+	<entity name="Entry" local-service="true" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
