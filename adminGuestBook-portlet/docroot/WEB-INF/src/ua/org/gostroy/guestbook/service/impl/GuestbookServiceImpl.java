@@ -18,8 +18,10 @@ import java.util.List;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
+import ua.org.gostroy.guestbook.NoSuchGuestbookException;
 import ua.org.gostroy.guestbook.model.Guestbook;
 import ua.org.gostroy.guestbook.service.GuestbookLocalServiceUtil;
 import ua.org.gostroy.guestbook.service.base.GuestbookServiceBaseImpl;
@@ -87,4 +89,9 @@ public class GuestbookServiceImpl extends GuestbookServiceBaseImpl {
 	public int getGuestbooksCount(long groupId) throws SystemException {
 		return guestbookPersistence.filterCountByGroupId(groupId);
 	}
+
+	public Guestbook getGuestbookByG_N(long groupId, String name, OrderByComparator orderByComparator) throws SystemException, NoSuchGuestbookException {
+		return guestbookPersistence.findByG_N_First(groupId, name, orderByComparator);
+	}
+	
 }
