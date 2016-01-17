@@ -412,6 +412,16 @@ public class GuestbookLocalServiceWrapper implements GuestbookLocalService,
 		return _guestbookLocalService.getGuestbooksCount(groupId);
 	}
 
+	@Override
+	public ua.org.gostroy.guestbook.model.Guestbook updateStatus(long userId,
+		long guestbookId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _guestbookLocalService.updateStatus(userId, guestbookId, status,
+			serviceContext);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

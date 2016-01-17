@@ -168,6 +168,13 @@ public class GuestbookLocalServiceClp implements GuestbookLocalService {
 		_methodName29 = "getGuestbooksCount";
 
 		_methodParameterTypes29 = new String[] { "long" };
+
+		_methodName30 = "updateStatus";
+
+		_methodParameterTypes30 = new String[] {
+				"long", "long", "int",
+				"com.liferay.portal.service.ServiceContext"
+			};
 	}
 
 	@Override
@@ -1105,6 +1112,50 @@ public class GuestbookLocalServiceClp implements GuestbookLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
+	public ua.org.gostroy.guestbook.model.Guestbook updateStatus(long userId,
+		long guestbookId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
+					new Object[] {
+						userId,
+						
+					guestbookId,
+						
+					status,
+						
+					ClpSerializer.translateInput(serviceContext)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (ua.org.gostroy.guestbook.model.Guestbook)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -1164,4 +1215,6 @@ public class GuestbookLocalServiceClp implements GuestbookLocalService {
 	private String[] _methodParameterTypes28;
 	private String _methodName29;
 	private String[] _methodParameterTypes29;
+	private String _methodName30;
+	private String[] _methodParameterTypes30;
 }

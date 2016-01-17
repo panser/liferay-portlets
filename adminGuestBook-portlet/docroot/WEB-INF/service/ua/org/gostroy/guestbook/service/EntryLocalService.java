@@ -339,4 +339,10 @@ public interface EntryLocalService extends BaseLocalService,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public ua.org.gostroy.guestbook.model.Entry updateStatus(long userId,
+		long guestbookId, long entryId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

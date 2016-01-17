@@ -3690,6 +3690,10 @@ public class GuestbookPersistenceImpl extends BasePersistenceImpl<Guestbook>
 		guestbookImpl.setCreateDate(guestbook.getCreateDate());
 		guestbookImpl.setModifiedDate(guestbook.getModifiedDate());
 		guestbookImpl.setName(guestbook.getName());
+		guestbookImpl.setStatus(guestbook.getStatus());
+		guestbookImpl.setStatusByUserId(guestbook.getStatusByUserId());
+		guestbookImpl.setStatusByUserName(guestbook.getStatusByUserName());
+		guestbookImpl.setStatusDate(guestbook.getStatusDate());
 
 		return guestbookImpl;
 	}

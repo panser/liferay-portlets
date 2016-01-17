@@ -395,6 +395,16 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 			name, email, message, serviceContext);
 	}
 
+	@Override
+	public ua.org.gostroy.guestbook.model.Entry updateStatus(long userId,
+		long guestbookId, long entryId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.updateStatus(userId, guestbookId, entryId,
+			status, serviceContext);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

@@ -348,4 +348,10 @@ public interface GuestbookLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getGuestbooksCount(long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public ua.org.gostroy.guestbook.model.Guestbook updateStatus(long userId,
+		long guestbookId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

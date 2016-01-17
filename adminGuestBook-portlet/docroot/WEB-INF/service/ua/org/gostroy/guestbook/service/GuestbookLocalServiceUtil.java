@@ -385,6 +385,15 @@ public class GuestbookLocalServiceUtil {
 		return getService().getGuestbooksCount(groupId);
 	}
 
+	public static ua.org.gostroy.guestbook.model.Guestbook updateStatus(
+		long userId, long guestbookId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateStatus(userId, guestbookId, status, serviceContext);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

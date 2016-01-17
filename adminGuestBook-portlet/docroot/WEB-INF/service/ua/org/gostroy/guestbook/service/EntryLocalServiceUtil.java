@@ -378,6 +378,16 @@ public class EntryLocalServiceUtil {
 			message, serviceContext);
 	}
 
+	public static ua.org.gostroy.guestbook.model.Entry updateStatus(
+		long userId, long guestbookId, long entryId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateStatus(userId, guestbookId, entryId, status,
+			serviceContext);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

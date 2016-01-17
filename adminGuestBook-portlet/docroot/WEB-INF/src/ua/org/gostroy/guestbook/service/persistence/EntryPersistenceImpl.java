@@ -3800,6 +3800,10 @@ public class EntryPersistenceImpl extends BasePersistenceImpl<Entry>
 		entryImpl.setEmail(entry.getEmail());
 		entryImpl.setMessage(entry.getMessage());
 		entryImpl.setGuestbookId(entry.getGuestbookId());
+		entryImpl.setStatus(entry.getStatus());
+		entryImpl.setStatusByUserId(entry.getStatusByUserId());
+		entryImpl.setStatusByUserName(entry.getStatusByUserName());
+		entryImpl.setStatusDate(entry.getStatusDate());
 
 		return entryImpl;
 	}

@@ -168,6 +168,13 @@ public class GuestbookLocalServiceClpInvoker {
 		_methodName66 = "getGuestbooksCount";
 
 		_methodParameterTypes66 = new String[] { "long" };
+
+		_methodName67 = "updateStatus";
+
+		_methodParameterTypes67 = new String[] {
+				"long", "long", "int",
+				"com.liferay.portal.service.ServiceContext"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -340,6 +347,14 @@ public class GuestbookLocalServiceClpInvoker {
 			return GuestbookLocalServiceUtil.getGuestbooksCount(((Long)arguments[0]).longValue());
 		}
 
+		if (_methodName67.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
+			return GuestbookLocalServiceUtil.updateStatus(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[3]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -401,4 +416,6 @@ public class GuestbookLocalServiceClpInvoker {
 	private String[] _methodParameterTypes65;
 	private String _methodName66;
 	private String[] _methodParameterTypes66;
+	private String _methodName67;
+	private String[] _methodParameterTypes67;
 }
