@@ -45,24 +45,24 @@ public class EntryServiceClp implements EntryService {
 				"long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName5 = "getEntries";
+		_methodName5 = "updateEntry";
 
-		_methodParameterTypes5 = new String[] { "long", "long" };
-
-		_methodName6 = "getEntries";
-
-		_methodParameterTypes6 = new String[] { "long", "long", "int", "int" };
-
-		_methodName7 = "getEntriesCount";
-
-		_methodParameterTypes7 = new String[] { "long", "long" };
-
-		_methodName8 = "updateEntry";
-
-		_methodParameterTypes8 = new String[] {
+		_methodParameterTypes5 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
+
+		_methodName6 = "getEntries";
+
+		_methodParameterTypes6 = new String[] { "long", "long" };
+
+		_methodName7 = "getEntries";
+
+		_methodParameterTypes7 = new String[] { "long", "long", "int", "int" };
+
+		_methodName8 = "getEntriesCount";
+
+		_methodParameterTypes8 = new String[] { "long", "long" };
 	}
 
 	@Override
@@ -204,95 +204,6 @@ public class EntryServiceClp implements EntryService {
 	}
 
 	@Override
-	public java.util.List<ua.org.gostroy.guestbook.model.Entry> getEntries(
-		long groupId, long guestbookId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableService.invokeMethod(_methodName5,
-					_methodParameterTypes5,
-					new Object[] { groupId, guestbookId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<ua.org.gostroy.guestbook.model.Entry>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<ua.org.gostroy.guestbook.model.Entry> getEntries(
-		long groupId, long guestbookId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableService.invokeMethod(_methodName6,
-					_methodParameterTypes6,
-					new Object[] { groupId, guestbookId, start, end });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<ua.org.gostroy.guestbook.model.Entry>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public int getEntriesCount(long groupId, long guestbookId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableService.invokeMethod(_methodName7,
-					_methodParameterTypes7,
-					new Object[] { groupId, guestbookId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
 	public ua.org.gostroy.guestbook.model.Entry updateEntry(long userId,
 		long guestbookId, long entryId, java.lang.String name,
 		java.lang.String email, java.lang.String message,
@@ -302,8 +213,8 @@ public class EntryServiceClp implements EntryService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableService.invokeMethod(_methodName8,
-					_methodParameterTypes8,
+			returnObj = _invokableService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
 					new Object[] {
 						userId,
 						
@@ -341,6 +252,95 @@ public class EntryServiceClp implements EntryService {
 		}
 
 		return (ua.org.gostroy.guestbook.model.Entry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<ua.org.gostroy.guestbook.model.Entry> getEntries(
+		long groupId, long guestbookId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
+					new Object[] { groupId, guestbookId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<ua.org.gostroy.guestbook.model.Entry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<ua.org.gostroy.guestbook.model.Entry> getEntries(
+		long groupId, long guestbookId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
+					new Object[] { groupId, guestbookId, start, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<ua.org.gostroy.guestbook.model.Entry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int getEntriesCount(long groupId, long guestbookId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
+					new Object[] { groupId, guestbookId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
 	}
 
 	private InvokableService _invokableService;

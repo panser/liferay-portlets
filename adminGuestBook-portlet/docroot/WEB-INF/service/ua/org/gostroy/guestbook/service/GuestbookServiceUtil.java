@@ -79,6 +79,15 @@ public class GuestbookServiceUtil {
 		return getService().deleteGuestbook(guestbookId, serviceContext);
 	}
 
+	public static ua.org.gostroy.guestbook.model.Guestbook updateGuestbook(
+		long userId, long guestbookId, java.lang.String name,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateGuestbook(userId, guestbookId, name, serviceContext);
+	}
+
 	public static java.util.List<ua.org.gostroy.guestbook.model.Guestbook> getGuestbooks(
 		long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -96,13 +105,12 @@ public class GuestbookServiceUtil {
 		return getService().getGuestbooksCount(groupId);
 	}
 
-	public static ua.org.gostroy.guestbook.model.Guestbook updateGuestbook(
-		long userId, long guestbookId, java.lang.String name,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .updateGuestbook(userId, guestbookId, name, serviceContext);
+	public static ua.org.gostroy.guestbook.model.Guestbook getGuestbookByG_N(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			ua.org.gostroy.guestbook.NoSuchGuestbookException {
+		return getService().getGuestbookByG_N(groupId, name, orderByComparator);
 	}
 
 	public static void clearService() {

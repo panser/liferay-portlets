@@ -45,24 +45,24 @@ public class EntryServiceClpInvoker {
 				"long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName42 = "getEntries";
+		_methodName42 = "updateEntry";
 
-		_methodParameterTypes42 = new String[] { "long", "long" };
-
-		_methodName43 = "getEntries";
-
-		_methodParameterTypes43 = new String[] { "long", "long", "int", "int" };
-
-		_methodName44 = "getEntriesCount";
-
-		_methodParameterTypes44 = new String[] { "long", "long" };
-
-		_methodName45 = "updateEntry";
-
-		_methodParameterTypes45 = new String[] {
+		_methodParameterTypes42 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
+
+		_methodName43 = "getEntries";
+
+		_methodParameterTypes43 = new String[] { "long", "long" };
+
+		_methodName44 = "getEntries";
+
+		_methodParameterTypes44 = new String[] { "long", "long", "int", "int" };
+
+		_methodName45 = "getEntriesCount";
+
+		_methodParameterTypes45 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -96,32 +96,32 @@ public class EntryServiceClpInvoker {
 
 		if (_methodName42.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
-			return EntryServiceUtil.getEntries(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
-		}
-
-		if (_methodName43.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
-			return EntryServiceUtil.getEntries(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				((Integer)arguments[2]).intValue(),
-				((Integer)arguments[3]).intValue());
-		}
-
-		if (_methodName44.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
-			return EntryServiceUtil.getEntriesCount(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
-		}
-
-		if (_methodName45.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			return EntryServiceUtil.updateEntry(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
 				(java.lang.String)arguments[5],
 				(com.liferay.portal.service.ServiceContext)arguments[6]);
+		}
+
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+			return EntryServiceUtil.getEntries(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+			return EntryServiceUtil.getEntries(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+			return EntryServiceUtil.getEntriesCount(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		throw new UnsupportedOperationException();

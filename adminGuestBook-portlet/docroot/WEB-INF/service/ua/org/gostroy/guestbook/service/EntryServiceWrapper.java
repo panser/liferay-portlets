@@ -76,6 +76,17 @@ public class EntryServiceWrapper implements EntryService,
 	}
 
 	@Override
+	public ua.org.gostroy.guestbook.model.Entry updateEntry(long userId,
+		long guestbookId, long entryId, java.lang.String name,
+		java.lang.String email, java.lang.String message,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryService.updateEntry(userId, guestbookId, entryId, name,
+			email, message, serviceContext);
+	}
+
+	@Override
 	public java.util.List<ua.org.gostroy.guestbook.model.Entry> getEntries(
 		long groupId, long guestbookId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -93,17 +104,6 @@ public class EntryServiceWrapper implements EntryService,
 	public int getEntriesCount(long groupId, long guestbookId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _entryService.getEntriesCount(groupId, guestbookId);
-	}
-
-	@Override
-	public ua.org.gostroy.guestbook.model.Entry updateEntry(long userId,
-		long guestbookId, long entryId, java.lang.String name,
-		java.lang.String email, java.lang.String message,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _entryService.updateEntry(userId, guestbookId, entryId, name,
-			email, message, serviceContext);
 	}
 
 	/**

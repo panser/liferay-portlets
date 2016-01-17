@@ -96,6 +96,23 @@ public class GuestbookServiceSoap {
 		}
 	}
 
+	public static ua.org.gostroy.guestbook.model.GuestbookSoap updateGuestbook(
+		long userId, long guestbookId, java.lang.String name,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			ua.org.gostroy.guestbook.model.Guestbook returnValue = GuestbookServiceUtil.updateGuestbook(userId,
+					guestbookId, name, serviceContext);
+
+			return ua.org.gostroy.guestbook.model.GuestbookSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static ua.org.gostroy.guestbook.model.GuestbookSoap[] getGuestbooks(
 		long groupId) throws RemoteException {
 		try {
@@ -140,13 +157,13 @@ public class GuestbookServiceSoap {
 		}
 	}
 
-	public static ua.org.gostroy.guestbook.model.GuestbookSoap updateGuestbook(
-		long userId, long guestbookId, java.lang.String name,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public static ua.org.gostroy.guestbook.model.GuestbookSoap getGuestbookByG_N(
+		long groupId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws RemoteException {
 		try {
-			ua.org.gostroy.guestbook.model.Guestbook returnValue = GuestbookServiceUtil.updateGuestbook(userId,
-					guestbookId, name, serviceContext);
+			ua.org.gostroy.guestbook.model.Guestbook returnValue = GuestbookServiceUtil.getGuestbookByG_N(groupId,
+					name, orderByComparator);
 
 			return ua.org.gostroy.guestbook.model.GuestbookSoap.toSoapModel(returnValue);
 		}
